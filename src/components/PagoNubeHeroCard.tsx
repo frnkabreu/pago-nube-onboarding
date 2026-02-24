@@ -72,20 +72,9 @@ export function PagoNubeHeroCard({ activated = false }: PagoNubeHeroCardProps) {
             </div>
           </div>
         ) : (
-          <>
-            <span className="pago-nube-hero-success-tag">
-              ¡Sin costo por Transacción externa!
-            </span>
-            <div className="pago-nube-hero-actions">
-              <button className="pago-nube-btn-secondary">Más información</button>
-              <button
-                className="pago-nube-btn-primary"
-                onClick={() => navigate("/configuracion/activar-pago-nube")}
-              >
-                Configurar
-              </button>
-            </div>
-          </>
+          <span className="pago-nube-hero-success-tag">
+            ¡Sin costo por Transacción externa!
+          </span>
         )}
 
         <div className="pago-nube-hero-methods">
@@ -127,6 +116,18 @@ export function PagoNubeHeroCard({ activated = false }: PagoNubeHeroCardProps) {
 
           <p className="pago-nube-hero-disclaimer">* En el plan Pago Nube</p>
         </div>
+
+        {!activated && (
+          <div className="pago-nube-hero-actions">
+            <button className="pago-nube-btn-secondary">Más información</button>
+            <button
+              className="pago-nube-btn-primary"
+              onClick={() => navigate("/configuracion/activar-pago-nube")}
+            >
+              Configurar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
