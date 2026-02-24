@@ -1,0 +1,83 @@
+.apn-page {
+  padding: 32px 40px;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.apn-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  color: #000b19;
+  margin: 0 0 24px 0;
+}
+
+.apn-card {
+  background: #fff;
+  border: 1px solid #e1e3e8;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.apn-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #000b19;
+  margin: 0;
+}
+
+.apn-card-desc {
+  font-size: 14px;
+  line-height: 20px;
+  color: #676d7b;
+  margin: 0;
+}
+
+.apn-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.apn-field-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #000b19;
+}
+
+.apn-helper {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #676d7b;
+}
+
+.apn-helper-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #676d7b;
+}
+
+.apn-error-text {
+  font-size: 12px;
+  line-height: 16px;
+  color: #e53935;
+}
+
+.apn-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}

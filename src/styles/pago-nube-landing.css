@@ -1,0 +1,623 @@
+/* ══════════════════════════════════
+   Pago Nube Landing Page
+   ══════════════════════════════════ */
+
+.lp-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  box-sizing: border-box;
+}
+
+/* ── Shared: Section titles ─────── */
+.lp-section-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 32px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+/* ── Shared: Buttons ────────────── */
+.lp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #0059d5;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #fff;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.lp-btn-primary:hover {
+  background: #004ab3;
+}
+
+.lp-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 35px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid #b0b0b0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #0a0a0a;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.lp-btn-secondary:hover {
+  background: #f6f6f6;
+}
+
+.lp-btn-secondary svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Shared: Icon Circle ─────────── */
+.lp-icon-circle-wrap {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.lp-icon-circle-bg {
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  background: #eef4fa;
+}
+
+.lp-icon-circle-icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0059d5;
+}
+
+.lp-icon-circle-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lp-plan-card .lp-icon-circle-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.lp-plan-card .lp-icon-circle-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Hero ───────────────────────── */
+.lp-hero {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+}
+
+.lp-hero-image-wrap {
+  width: 320px;
+  height: 320px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.lp-hero-img {
+  width: 100%;
+  height: 96.37%;
+  object-fit: cover;
+  display: block;
+}
+
+.lp-hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  min-width: 0;
+}
+
+.lp-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lp-caption-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lp-caption {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #5d5d5d;
+  margin: 0;
+}
+
+.lp-hero-title {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.lp-hero-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #5d5d5d;
+  margin: 0;
+}
+
+.lp-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Beneficios ─────────────────── */
+.lp-beneficios {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.lp-cards-grid {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.lp-benefit-card {
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 2px 0px #888;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.lp-benefit-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lp-benefit-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.lp-benefit-card-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #5d5d5d;
+  margin: 0;
+}
+
+/* ── Detalle ────────────────────── */
+.lp-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.lp-detalle-group {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  width: 100%;
+}
+
+.lp-accordion-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lp-accordion-item {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lp-accordion-item--bordered {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lp-accordion-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.lp-accordion-desc {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #5d5d5d;
+  margin: 0;
+}
+
+.lp-detalle-image-wrap {
+  width: 560px;
+  height: 420px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.lp-detalle-img {
+  position: absolute;
+  width: 100%;
+  height: 85.85%;
+  top: 7.08%;
+  left: 0;
+  object-fit: contain;
+}
+
+/* ── Planes ─────────────────────── */
+.lp-planes {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.lp-planes-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 32px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.lp-plan-cards {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.lp-plan-card {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  gap: 16px;
+  min-width: 0;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 2px 0 #888;
+}
+
+.lp-plan-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lp-plan-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #000b19;
+  margin: 0;
+}
+
+.lp-plan-card-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.lp-plan-stat {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.lp-plan-stat-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0a0a0a;
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.lp-plan-stat-value {
+  font-family: "Geist Variable", "Geist", sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+  color: #00935b;
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.lp-plan-stat-iva {
+  font-family: "Geist Variable";
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+  color: #888;
+}
+
+.lp-plan-note {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #676d7b;
+  margin: 0;
+}
+
+.lp-planes-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ── FAQ ────────────────────────── */
+.lp-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.lp-faq-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 2px 0px #888;
+  overflow: hidden;
+}
+
+.lp-faq-item {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.lp-faq-item:last-child {
+  border-bottom: none;
+}
+
+.lp-faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  transition: background-color 0.15s;
+}
+
+.lp-faq-question:hover {
+  background-color: #fafafa;
+}
+
+.lp-faq-question-text {
+  font-family: "Geist Variable", "Geist", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  color: #0a0a0a;
+  flex: 1;
+}
+
+.lp-faq-chevron {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #5d5d5d;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-faq-chevron.open {
+  transform: rotate(180deg);
+}
+
+.lp-faq-chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lp-faq-answer {
+  padding: 0 16px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #5d5d5d;
+  margin: 0;
+}
+
+/* ── Footer / Help link ─────────── */
+.lp-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 32px;
+}
+
+.lp-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.lp-help-link:hover {
+  background-color: #eef5ff;
+}
+
+.lp-help-link-icon {
+  background: #eef5ff;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lp-help-link-icon svg {
+  width: 16px;
+  height: 16px;
+  color: #0059d5;
+}
+
+.lp-help-link-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0059d5;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.lp-help-link-text svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ─────────────────── */
+@media (max-width: 768px) {
+  .lp-page {
+    padding: 24px 16px;
+    gap: 48px;
+  }
+
+  .lp-hero {
+    flex-direction: column;
+  }
+
+  .lp-hero-image-wrap {
+    width: 100%;
+    height: 240px;
+  }
+
+  .lp-hero-content {
+    gap: 24px;
+  }
+
+  .lp-hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lp-cards-grid {
+    flex-direction: column;
+  }
+
+  .lp-detalle-group {
+    flex-direction: column;
+  }
+
+  .lp-detalle-image-wrap {
+    width: 100%;
+    height: 260px;
+  }
+
+  .lp-plan-cards {
+    flex-direction: column;
+  }
+
+  .lp-plan-card-stats {
+    flex-direction: column;
+  }
+
+  .lp-plan-stat-value {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .lp-plan-stat-iva {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .lp-planes-actions {
+    flex-direction: column;
+  }
+
+  .lp-faq-question-text {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "pago-nube-onboarding",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@nimbus-ds/accordion": "^1.8.0",
+    "@nimbus-ds/alert": "^2.5.0",
+    "@nimbus-ds/badge": "^3.2.0",
+    "@nimbus-ds/box": "^4.3.3",
+    "@nimbus-ds/button": "^2.10.1",
+    "@nimbus-ds/card": "^3.1.3",
+    "@nimbus-ds/checkbox": "^2.4.1",
+    "@nimbus-ds/icon": "^3.3.1",
+    "@nimbus-ds/icons": "^1.17.0",
+    "@nimbus-ds/input": "^2.6.1",
+    "@nimbus-ds/link": "^4.4.0",
+    "@nimbus-ds/sidebar": "^3.6.0",
+    "@nimbus-ds/styles": "^9.56.0",
+    "@nimbus-ds/tag": "^2.4.1",
+    "@nimbus-ds/text": "^6.6.1",
+    "@nimbus-ds/title": "^3.1.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "playwright": "^1.58.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.48.0",
+    "vite": "^7.3.1"
+  }
+}
