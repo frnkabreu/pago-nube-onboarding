@@ -482,6 +482,7 @@
   border-radius: 8px;
   box-shadow: 0 0 2px 0 var(--neutral-interactive-hover);
   overflow: hidden;
+  width: 100%;
 }
 
 .step-done {
@@ -576,24 +577,22 @@
 }
 
 .accordion-icon-wrapper {
-  width: 16px;
-  height: 16px;
+  width: 32px;
+  height: 32px;
   display: flex;
-  align-items: flex-start;
-  padding-top: 2px;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  border-radius: var(--border-radius-full);
+  background: #edf0f5;
   color: var(--neutral-text-high);
 }
 
 .accordion-item.open .accordion-icon-wrapper {
-  width: 24px;
-  height: 24px;
-  border-radius: var(--border-radius-full);
+  width: 32px;
+  height: 32px;
   background: var(--primary-surface);
   color: var(--primary-interactive);
-  align-items: center;
-  justify-content: center;
-  padding-top: 0;
 }
 
 .accordion-icon-wrapper svg {
