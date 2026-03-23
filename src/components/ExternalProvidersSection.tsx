@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   CreditCardIcon,
   WalletIcon,
@@ -6,7 +6,53 @@ import {
   CheckIcon,
   InfoCircleIcon,
   AppsIcon,
+  RocketIcon,
 } from "@nimbus-ds/icons";
+
+function CptTooltip() {
+  const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const iconRef = useRef<HTMLSpanElement>(null);
+
+  const handleMouseEnter = () => {
+    if (iconRef.current) {
+      const rect = iconRef.current.getBoundingClientRect();
+      setCoords({
+        x: rect.left + rect.width / 2,
+        y: rect.top,
+      });
+    }
+    setVisible(true);
+  };
+
+  const handleMouseLeave = () => setVisible(false);
+
+  return (
+    <>
+      <span
+        ref={iconRef}
+        className="ext-cpte-icon"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <InfoCircleIcon size="small" />
+      </span>
+      {visible && (
+        <div
+          className="ext-cpt-tooltip"
+          style={{
+            position: "fixed",
+            top: coords.y - 44,
+            left: coords.x,
+            transform: "translateX(-50%)",
+          }}
+        >
+          Es el costo por venta finalizada de Tiendanube.
+        </div>
+      )}
+    </>
+  );
+}
 
 type PaymentType = "card" | "wallet" | "cash" | "transfer";
 type ProviderStatus = "active" | "inactive";
@@ -16,7 +62,7 @@ interface PaymentRow {
   method: string;
   settlement: string;
   rate: string;
-  cpte: string;
+  cpt: string;
 }
 
 interface ProviderData {
@@ -70,7 +116,7 @@ const pagosPersonalizados: ProviderData = {
   description: "",
   badges: [],
   rows: [
-    { type: "cash", method: "A convenir", settlement: "En el momento", rate: "sin costo", cpte: "2%" },
+    { type: "cash", method: "A convenir", settlement: "En el momento", rate: "sin costo", cpt: "2%" },
   ],
   link: "#",
   isSpecial: true,
@@ -81,10 +127,9 @@ const aplazo: ProviderData = {
   name: "Aplazo",
   status: "inactive",
   description: "",
-  badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
+  badges: ["Tasas exclusivas para clientes de Tiendanube"],
   rows: [
-    { type: "card", method: "Tarjeta de débito, Tarjeta de crédito", settlement: "15 días", rate: "3.8% + $3.50 + IVA", cpte: "2%" },
-    { type: "transfer", method: "Transferencia o depósito", settlement: "3 días", rate: "$8.00 + IVA", cpte: "2%" },
+    { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "7 días", rate: "5.00%", cpt: "2%" },
   ],
   link: "#",
   isSpecial: true,
@@ -97,7 +142,18 @@ const externalProviders: ProviderData[] = [
     description: "Acepta todas las tarjetas. Solución simple para pagos presenciales y a distancia.",
     badges: ["Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "card", method: "Todas las tarjetas", settlement: "24 horas", rate: "3.6% + IVA", cpte: "2%" },
+      { type: "cash", method: "Redes de pago en efectivo, Tarjeta de débito, Tarjeta de crédito", settlement: "1 día", rate: "3.60% + IVA", cpt: "2%" },
+    ],
+    link: "#",
+  },
+  {
+    name: "ClubPago",
+    status: "inactive",
+    description: "",
+    badges: ["Gateway"],
+    rows: [
+      { type: "card", method: "Tarjeta de débito, Tarjeta de crédito", settlement: "3 días", rate: "3.50% + IVA", cpt: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "2 días", rate: "$7.50 + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -105,10 +161,10 @@ const externalProviders: ProviderData[] = [
     name: "Conekta",
     status: "inactive",
     description: "Pagos en efectivo en OXXO y transferencias SPEI en tiempo real.",
-    badges: ["Gateway", "Checkout transparente"],
+    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "wallet", method: "Billetera, Tarjeta de crédito, Tarjeta de débito", settlement: "En el momento", rate: "2.9% + $2.50 + IVA", cpte: "2%" },
-      { type: "cash", method: "Medios de pago en efectivo", settlement: "3 días", rate: "3.7% + IVA", cpte: "2%" },
+      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "2 días", rate: "3.40% + $3.00 + IVA", cpt: "2%" },
+      { type: "cash", method: "Redes de pago en efectivo", settlement: "3 días", rate: "3.70% + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -118,8 +174,8 @@ const externalProviders: ProviderData[] = [
     description: "Soluciones de crédito y pago flexibles para tu negocio.",
     badges: ["Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "wallet", method: "Billetera virtual", settlement: "1 día", rate: "$8.00 + IVA", cpte: "2%" },
-      { type: "transfer", method: "Transferencia o depósito", settlement: "1 día", rate: "1.5% + IVA", cpte: "2%" },
+      { type: "wallet", method: "Billetera Virtual", settlement: "1 día", rate: "$0.00 + IVA", cpt: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "1 día", rate: "3.50% + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -129,8 +185,19 @@ const externalProviders: ProviderData[] = [
     description: "Interoperabilidad de pagos con código QR y transferencias.",
     badges: ["Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "cash", method: "Medios de pago en efectivo", settlement: "3 días", rate: "2.9% + $2.50 + IVA", cpte: "2%" },
-      { type: "transfer", method: "Transferencia o depósito", settlement: "3 días", rate: "$8.00 + IVA", cpte: "2%" },
+      { type: "cash", method: "Redes de pago en efectivo", settlement: "3 días", rate: "2.10% + $2.00 + IVA", cpt: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "3 días", rate: "$8.00 + IVA", cpt: "2%" },
+    ],
+    link: "#",
+  },
+  {
+    name: "Ecart Pay",
+    status: "inactive",
+    description: "",
+    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube", "Ventas internacionales", "Checkout transparente"],
+    rows: [
+      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "2 días", rate: "2.90% + $3.70 + IVA", cpt: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "2 días", rate: "$12.50 + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -140,18 +207,8 @@ const externalProviders: ProviderData[] = [
     description: "Ofrece pagos flexibles a tus clientes. Compra ahora, paga después.",
     badges: ["Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "card", method: "Tarjeta de débito, Tarjeta de crédito", settlement: "2 días", rate: "3.5% + IVA", cpte: "2%" },
-      { type: "transfer", method: "Transferencia o depósito", settlement: "5 días", rate: "2.5% + IVA", cpte: "2%" },
-    ],
-    link: "#",
-  },
-  {
-    name: "Konfío",
-    status: "inactive",
-    description: "Soluciones financieras y herramientas de pago para empresas en crecimiento.",
-    badges: ["Tasas exclusivas para clientes de Tiendanube"],
-    rows: [
-      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "1 día", rate: "2.90%", cpte: "2%" },
+      { type: "card", method: "Tarjeta de débito, Tarjeta de crédito", settlement: "2 días", rate: "5.80% + IVA", cpt: "2%" },
+      { type: "card", method: "Tarjeta de débito, Tarjeta de crédito", settlement: "8 días", rate: "2.80% + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -159,9 +216,9 @@ const externalProviders: ProviderData[] = [
     name: "Kueski Pay",
     status: "inactive",
     description: "Permite a tus clientes comprar ahora y pagar después sin necesidad de tarjeta.",
-    badges: ["Tasas exclusivas para clientes de Tiendanube"],
+    badges: [],
     rows: [
-      { type: "card", method: "Kueski Pay", settlement: "En el momento", rate: "5.5% + IVA", cpte: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "7 días", rate: "6.50% + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -169,10 +226,10 @@ const externalProviders: ProviderData[] = [
     name: "Mercado Pago",
     status: "inactive",
     description: "Recibe pagos con la plataforma líder de América Latina. Seguridad y rapidez.",
-    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
+    badges: ["Gateway", "Checkout transparente"],
     rows: [
-      { type: "wallet", method: "Tarjeta de crédito, Tarjeta de débito, Billetera Virtual", settlement: "En el momento", rate: "3.49% + $4.00", cpte: "2%" },
-      { type: "cash", method: "Medios de pago en efectivo", settlement: "3 días", rate: "3.79% + $4.00", cpte: "2%" },
+      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito, Billetera Virtual", settlement: "En el momento", rate: "3.49% + $4.00", cpt: "2%" },
+      { type: "cash", method: "Redes de pago en efectivo", settlement: "3 días", rate: "3.79% + $4.00", cpt: "2%" },
     ],
     link: "#",
   },
@@ -180,10 +237,10 @@ const externalProviders: ProviderData[] = [
     name: "Openpay",
     status: "inactive",
     description: "Plataforma de pagos integral. Tarjetas, efectivo y transferencias.",
-    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube", "Ventas internacionales", "Checkout transparente"],
+    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "2 días", rate: "2.9% + $2.50 + IVA", cpte: "2%" },
-      { type: "transfer", method: "Transferencia o depósito", settlement: "2 días", rate: "$12.00 + IVA", cpte: "2%" },
+      { type: "card", method: "Tarjeta de débito, Tarjeta de crédito, Redes de pago en efectivo", settlement: "3 días", rate: "2.90% + $2.50 + IVA", cpt: "2%" },
+      { type: "transfer", method: "Transferencia o depósito", settlement: "3 días", rate: "$8.00 + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -191,29 +248,29 @@ const externalProviders: ProviderData[] = [
     name: "PayPal",
     status: "inactive",
     description: "PayPal ofrece una forma segura y rápida de pagar en línea, aceptado mundialmente.",
-    badges: ["Tasas exclusivas para clientes de Tiendanube", "Ventas internacionales"],
+    badges: ["Ventas internacionales"],
     rows: [
-      { type: "wallet", method: "Billetera Virtual, Tarjeta de crédito, Tarjeta de débito", settlement: "En el momento", rate: "3.95% + $4.00 + IVA", cpte: "2%" },
+      { type: "wallet", method: "Billetera Virtual, Tarjeta de crédito, Tarjeta de débito", settlement: "En el momento", rate: "3.95% + $4.00 + IVA", cpt: "2%" },
     ],
     link: "#",
   },
   {
-    name: "Stripe",
+    name: "Stripe by Wava",
     status: "inactive",
     description: "La infraestructura de pagos para internet. Acepta pagos de todo el mundo.",
     badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "En el momento", rate: "4.00% + $4.50", cpte: "2%" },
+      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "En el momento", rate: "4.00% + $4.50", cpt: "2%" },
     ],
     link: "#",
   },
   {
-    name: "Ualá Bis",
+    name: "YoloPago",
     status: "inactive",
-    description: "Cobra con link de pago o mPOS. Comisiones bajas y dinero al instante.",
-    badges: ["Tasas exclusivas para clientes de Tiendanube"],
+    description: "",
+    badges: ["Gateway", "Tasas exclusivas para clientes de Tiendanube"],
     rows: [
-      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "1 día", rate: "2.9% + $2.50 + IVA", cpte: "2%" },
+      { type: "card", method: "Tarjeta de crédito, Tarjeta de débito", settlement: "1 día", rate: "2.90% + $3.00 + IVA", cpt: "2%" },
     ],
     link: "#",
   },
@@ -233,7 +290,7 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
         <span className="ext-card-name">{provider.name}</span>
         <div className="ext-card-summary-right">
           <span className="ext-tag ext-tag--warning">
-            Costo por transacción externa: 2%
+            Costo por transacción: 2%
           </span>
           <span
             className={
@@ -252,10 +309,6 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
 
       {open && (
         <div className="ext-card-content">
-          {provider.description && (
-            <p className="ext-card-description">{provider.description}</p>
-          )}
-
           {provider.badges.length > 0 && (
             <div className="ext-card-badges">
               {provider.badges.map((badge) => (
@@ -280,10 +333,7 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
               </div>
               <div className="ext-table-col ext-table-col--cpte">
                 <span className="ext-table-label ext-table-label--cpte">
-                  CPTE{" "}
-                  <span className="ext-cpte-icon">
-                    <InfoCircleIcon size="small" />
-                  </span>
+                  CPT <CptTooltip />
                 </span>
               </div>
             </div>
@@ -303,7 +353,7 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
                   <span className="ext-rate-text">{row.rate}</span>
                 </div>
                 <div className="ext-table-col ext-table-col--cpte">
-                  <span className="ext-cpte-text">{row.cpte}</span>
+                  <span className="ext-cpte-text">{row.cpt}</span>
                 </div>
               </div>
             ))}
@@ -312,23 +362,27 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
           {provider.hasUpgradeCTA && (
             <div className="ext-upgrade-cta">
               <div className="ext-upgrade-icon-wrap">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10 2L2 7l8 5 8-5-8-5z" fill="#1d4ed8" opacity="0.7" />
-                  <path d="M2 12l8 5 8-5M2 17l8 5 8-5" stroke="#1d4ed8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                </svg>
+                <RocketIcon size="medium" />
               </div>
               <div className="ext-upgrade-text">
                 <strong>¡Agrega nuevas opciones de pago personalizado!</strong>
                 <span>Sube de plan y ofrece a tus clientes la posibilidad de pagar en efectivo o por transferencia.</span>
               </div>
+              <span className="ext-upgrade-chevron">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06L7.28 12.78a.75.75 0 0 1-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06z" />
+                </svg>
+              </span>
             </div>
           )}
 
-          <div className="ext-card-footer">
-            <a href={provider.link} className="ext-card-link">
-              <ExternalLinkIcon />
-              Ir a {provider.name}
-            </a>
+          <div className={`ext-card-footer${provider.hasUpgradeCTA ? " ext-card-footer--end" : ""}`}>
+            {!provider.hasUpgradeCTA && (
+              <a href={provider.link} className="ext-card-link">
+                <ExternalLinkIcon />
+                Ir a {provider.name}
+              </a>
+            )}
             <button className="ext-more-info-btn">Más información</button>
           </div>
         </div>

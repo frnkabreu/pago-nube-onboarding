@@ -109,6 +109,15 @@
   margin: 0;
 }
 
+.pendientes-empty-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--neutral-text-low, #6b7280);
+  text-align: center;
+  margin: 0;
+}
+
 /* ── Pago Nube Hero Card ── */
 .pago-nube-hero {
   border: 1px solid #dbeafe;
@@ -127,7 +136,7 @@
   background: var(--primary-surface);
   position: relative;
   overflow: hidden;
-  height: 453px;
+  min-height: 453px;
 }
 
 .pago-nube-hero-logo {
@@ -138,10 +147,13 @@
   width: 104px;
 }
 
-.pago-nube-hero-logo img {
-  height: 20px;
-  width: 104px;
-  object-fit: contain;
+.pago-nube-hero-logo-text {
+  color: #0050C3;
+  font-family: "Geist Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
 }
 
 .pago-nube-hero-title {
@@ -165,6 +177,16 @@
   line-height: 20px;
   color: rgba(0, 11, 25, 1);
   margin: 0;
+}
+
+/* Wrapper transparente no desktop — filhos se posicionam relativos ao .pago-nube-hero-left */
+.pago-nube-hero-illustration-wrapper {
+  display: contents;
+}
+
+/* Wrapper transparente no desktop — check tags posicionadas relativos ao .pago-nube-hero-left */
+.pago-nube-hero-check-tags {
+  display: contents;
 }
 
 .pago-nube-hero-illustration-img {
@@ -286,8 +308,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  height: 60px;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  min-height: 60px;
   box-sizing: border-box;
 }
 
@@ -366,6 +389,14 @@
 
 .pago-nube-btn-secondary:hover {
   background-color: var(--neutral-surface);
+}
+
+.pago-nube-btn-secondary--gray {
+  background-color: var(--neutral-surface-highlight, #e5e7eb);
+}
+
+.pago-nube-btn-secondary--gray:hover {
+  background-color: var(--neutral-surface, #d1d5db);
 }
 
 .pago-nube-btn-primary {
@@ -650,7 +681,7 @@
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.1), 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
@@ -658,6 +689,16 @@
   border: none;
   border-radius: 8px;
   box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.1), 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
+}
+
+.ext-card--special .ext-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.ext-card--special .ext-card-content {
+  padding: 24px;
 }
 
 .ext-card-summary {
@@ -677,7 +718,7 @@
 
 .ext-card--special .ext-card-summary {
   padding: 0 16px;
-  height: 57px;
+  height: 52px;
 }
 
 .ext-card-summary:hover {
@@ -699,9 +740,6 @@
   flex-shrink: 0;
 }
 
-.ext-card--special .ext-card-summary-right {
-  gap: 16px;
-}
 
 .ext-card-chevron {
   display: flex;
@@ -786,20 +824,19 @@
 /* ── Rates Table ── */
 .ext-table {
   width: 100%;
-  overflow: hidden;
   margin-bottom: 16px;
 }
 
 .ext-table-header {
   display: grid;
   grid-template-columns: 1fr 120px 200px 80px;
-  padding-bottom: 6px;
+  padding: 0 7px 6px;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
   margin-bottom: 4px;
 }
 
 .ext-table-label {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 14px;
   color: #6a7282;
@@ -813,15 +850,35 @@
   gap: 4px;
 }
 
+.ext-table-col--cpte {
+  padding-left: 0;
+  justify-content: flex-start;
+}
+
 .ext-cpte-icon {
   display: inline-flex;
   align-items: center;
   color: #6a7282;
+  cursor: default;
 }
 
 .ext-cpte-icon svg {
   width: 10.5px;
   height: 10.5px;
+}
+
+/* ── CPT Tooltip ── */
+.ext-cpt-tooltip {
+  background: #1b1b2c;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
 }
 
 .ext-table-row {
@@ -857,7 +914,7 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
-  color: #364153;
+  color: var(--primary-interactive, #0059d5);
 }
 
 .ext-method-icon svg {
@@ -908,29 +965,30 @@
 .ext-upgrade-cta {
   display: flex;
   align-items: center;
-  gap: 14px;
-  background: #eff6ff;
-  border: 1px solid #2563eb;
+  gap: 8px;
+  background: #deeffe;
+  border: 1px solid #0059d5;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 8px;
   margin-bottom: 16px;
-  min-height: 64px;
 }
 
 .ext-upgrade-icon-wrap {
-  width: 34px;
-  height: 34px;
-  background: #bfdbfe;
-  border-radius: 7px;
+  width: 36px;
+  height: 36px;
+  background: #7abcf7;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  padding: 6px;
+  box-sizing: border-box;
 }
 
 .ext-upgrade-icon-wrap svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .ext-upgrade-text {
@@ -941,17 +999,27 @@
 }
 
 .ext-upgrade-text strong {
-  font-size: 12.25px;
-  font-weight: 700;
-  line-height: 17.5px;
-  color: #101828;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: #00255a;
 }
 
 .ext-upgrade-text span {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 400;
-  line-height: 14px;
-  color: #101828;
+  line-height: 16px;
+  color: #00255a;
+}
+
+.ext-upgrade-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 36px;
+  flex-shrink: 0;
+  color: #0059d5;
 }
 
 /* ── Card Footer ── */
@@ -959,6 +1027,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.ext-card-footer--end {
+  justify-content: flex-end;
 }
 
 .ext-card-link {
@@ -1175,4 +1247,247 @@
 .pago-nube-btn-ir-pagos {
   margin-top: 6px;
   align-self: flex-start;
+}
+
+.pago-nube-alert-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--neutral-text-low, #6b7280);
+  border-radius: 4px;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.pago-nube-alert-close:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--neutral-text-high, #1f2937);
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE — max-width: 768px
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── Page ── */
+  .medios-pago-page {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .medios-pago-title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .medios-pago-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .medios-pago-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .medios-pago-tab {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── Hero Card: switch to stacked layout ── */
+  .pago-nube-hero {
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+
+  .pago-nube-hero-left {
+    width: 100%;
+    min-width: unset;
+    min-height: unset;
+    position: relative;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  /* Convert all absolute-positioned elements to static flow */
+  .pago-nube-hero-logo {
+    position: static;
+    width: auto;
+    height: auto;
+    align-self: flex-start;
+  }
+
+  .pago-nube-hero-title {
+    position: static;
+    width: 100%;
+    font-size: 28px;
+    line-height: 32px;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  .pago-nube-hero-description {
+    position: static;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  /* Illustration wrapper: display:block restaura o wrapper como caixa real no mobile */
+  .pago-nube-hero-illustration-wrapper {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 251px;
+    margin: 8px auto 0;
+  }
+
+  .pago-nube-hero-illustration-img {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+
+  .pago-nube-hero-checkout-badge {
+    display: none;
+  }
+
+  /* Green tag overlaid on illustration */
+  .pago-nube-hero-float-tag {
+    position: absolute;
+  }
+
+  .pago-nube-hero-float-tag--green {
+    left: 0;
+    top: 46px;
+    width: 120px;
+  }
+
+  /* Check tags: display:flex restaura o wrapper como caixa real no mobile */
+  .pago-nube-hero-check-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .pago-nube-hero-check-tag {
+    position: static;
+  }
+
+  .pago-nube-hero-check-tag--1,
+  .pago-nube-hero-check-tag--2 {
+    left: unset;
+    top: unset;
+  }
+
+  .pago-nube-hero-right {
+    width: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+    background: white;
+    gap: 16px;
+  }
+
+  .pago-nube-hero-methods {
+    gap: 8px;
+  }
+
+  .pago-nube-method-card {
+    height: auto;
+    min-height: 60px;
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .pago-nube-method-commission {
+    white-space: normal;
+  }
+
+  /* ── Activated alert ── */
+  .pago-nube-activated-alert {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  /* ── External providers: flat rows, no expansion ── */
+  .ext-card-content {
+    display: none !important;
+  }
+
+  .ext-section {
+    gap: 16px;
+  }
+
+  .ext-section-header {
+    gap: 4px;
+  }
+
+  .ext-section-title {
+    font-size: 17.5px;
+    line-height: 24px;
+  }
+
+  .ext-card {
+    border-radius: 12px;
+  }
+
+  .ext-card-summary {
+    padding: 16px;
+    cursor: pointer;
+  }
+
+  .ext-tag--warning {
+    font-size: 12px;
+    padding: 2px 8px;
+  }
+
+  .ext-callout-card {
+    border-radius: 8px;
+  }
+
+  .ext-providers-list {
+    gap: 16px;
+  }
+
+  .ext-providers-group {
+    gap: 16px;
+  }
+
+  .ext-providers-subgroup {
+    gap: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 2px 0 var(--neutral-interactive-hover);
+  }
+
+  .ext-providers-subgroup .ext-card {
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 1px solid var(--neutral-surface-highlight);
+  }
+
+  .ext-providers-subgroup .ext-card:last-child {
+    border-bottom: none;
+  }
 }

@@ -433,6 +433,7 @@
   flex-direction: column;
   background: #f6f6f6;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .page-header {
@@ -493,8 +494,8 @@
 }
 
 .step-done-icon {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -502,8 +503,8 @@
 }
 
 .step-done-check {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--border-radius-full);
   background: var(--success-surface-highlight);
   display: flex;
@@ -523,8 +524,8 @@
 }
 
 .step-done-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 20px;
   color: var(--neutral-text-high);
   text-decoration: line-through;
@@ -566,38 +567,43 @@
 }
 
 .accordion-item.open {
-  background: var(--neutral-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: var(--neutral-surface, #f6f6f6);
 }
 
 .accordion-header {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  padding: 16px;
+  padding: 13px 16px;
+  user-select: none;
 }
 
 .accordion-icon-wrapper {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   border-radius: var(--border-radius-full);
-  background: #edf0f5;
-  color: var(--neutral-text-high);
+  background: rgba(238, 245, 255, 1);
+  color: rgba(0, 37, 90, 1);
 }
 
 .accordion-item.open .accordion-icon-wrapper {
-  width: 32px;
-  height: 32px;
-  background: var(--primary-surface);
-  color: var(--primary-interactive);
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 1);
+  color: rgba(0, 37, 90, 1);
+  margin-top: -2px;
 }
 
 .accordion-icon-wrapper svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
 }
 
@@ -610,8 +616,8 @@
 }
 
 .accordion-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 20px;
   color: var(--neutral-text-high);
 }
@@ -674,7 +680,10 @@
 
 /* ── Accordion — estado aberto ── */
 .accordion-item.open .accordion-header {
-  padding: 8px 16px;
+  display: flex;
+  padding: 13px 16px 16px;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .accordion-item.open .accordion-title {
@@ -682,11 +691,16 @@
   font-weight: 500;
 }
 
-.accordion-item.open .accordion-body {
-  padding: 0 16px 16px 48px;
+.accordion-item.open .accordion-header-text {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+}
+
+
+.accordion-item.open .accordion-chevron {
+  align-self: flex-start;
+  margin-top: 2px;
 }
 
 /* ── Confirm Account Card ── */
@@ -710,7 +724,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--primary-interactive);
+  color: rgba(0, 37, 90, 1);
+  background: rgba(238, 245, 255, 1);
+  border-radius: var(--border-radius-full);
 }
 
 .confirm-card-icon-circle svg {
@@ -819,4 +835,19 @@
 .help-link-icon svg {
   width: 16px;
   height: 16px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .app-sidebar {
+    display: none;
+  }
+
+  .main-area {
+    width: 100%;
+  }
 }

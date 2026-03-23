@@ -18,7 +18,8 @@ import "../styles/settings-sidebar.css";
 
 interface SettingsItem {
   label: string;
-  icon: React.ComponentType<{ size?: string }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   path: string;
   activePaths?: string[];
 }
@@ -95,7 +96,6 @@ export function SettingsSidebar() {
                 className={`settings-sidebar-item${
                   (item.activePaths ?? [item.path]).includes(location.pathname) ? " active" : ""
                 }`}
-                onClick={() => navigate(item.path)}
               >
                 <span className="settings-sidebar-item-icon">
                   <item.icon size="small" />

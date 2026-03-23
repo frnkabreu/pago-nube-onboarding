@@ -28,7 +28,8 @@ import {
 
 interface MenuItemConfig {
   label: string;
-  icon: React.ComponentType<{ size?: string }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   active?: boolean;
   href?: string;
   badge?: "external" | null;

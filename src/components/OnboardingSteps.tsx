@@ -13,7 +13,8 @@ import {
 interface StepConfig {
   id: string;
   title: string;
-  icon: React.ComponentType<{ size?: string }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: React.ComponentType<any>;
   description?: string;
   cta?: { label: string; href?: string };
 }
@@ -100,28 +101,42 @@ export function OnboardingSteps() {
                   }
                 }}
               >
-                <span className="accordion-icon-wrapper">
+                <span
+                  className="accordion-icon-wrapper"
+                  style={isOpen ? { background: "#ffffff" } : undefined}
+                >
                   <step.icon size="small" />
                 </span>
                 <div className="accordion-header-text">
                   <span className="accordion-title">{step.title}</span>
+                  {isOpen && step.description && (
+                    <p className="accordion-description">{step.description}</p>
+                  )}
+                  {isOpen && step.cta && (
+                    step.cta.href
+                      ? (
+                        <a
+                          href={step.cta.href}
+                          className="accordion-cta"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {step.cta.label}
+                        </a>
+                      )
+                      : (
+                        <button
+                          className="accordion-cta"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {step.cta.label}
+                        </button>
+                      )
+                  )}
                 </div>
                 <span className={`accordion-chevron${isOpen ? " open" : ""}`}>
                   <ChevronDownIcon size="small" />
                 </span>
               </div>
-              {isOpen && (step.description || step.cta) && (
-                <div className="accordion-body">
-                  {step.description && (
-                    <p className="accordion-description">{step.description}</p>
-                  )}
-                  {step.cta && (
-                    step.cta.href
-                      ? <a href={step.cta.href} className="accordion-cta">{step.cta.label}</a>
-                      : <button className="accordion-cta">{step.cta.label}</button>
-                  )}
-                </div>
-              )}
             </div>
           );
         })}

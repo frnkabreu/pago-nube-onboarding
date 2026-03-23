@@ -121,7 +121,7 @@ export function PagoNubeLandingPage() {
                 <div className="lp-hero-actions">
                   <button
                     className="lp-btn-primary"
-                    onClick={() => navigate("/configuracion/activar-pago-nube")}
+                    onClick={() => navigate("/configuracion/activar-pago-nube", { state: { from: "/pago-nube" } })}
                   >
                     Configurar
                   </button>
@@ -201,7 +201,7 @@ export function PagoNubeLandingPage() {
                   <div className="lp-plan-card-stats">
                     <div className="lp-plan-stat">
                       <p className="lp-plan-stat-label">Recibe en</p>
-                      <p className="lp-plan-stat-value">2 días</p>
+                      <p className="lp-plan-stat-value">1 día</p>
                     </div>
                     <div className="lp-plan-stat">
                       <p className="lp-plan-stat-label">
@@ -230,7 +230,7 @@ export function PagoNubeLandingPage() {
                   <div className="lp-plan-card-stats">
                     <div className="lp-plan-stat">
                       <p className="lp-plan-stat-label">Recibe en</p>
-                      <p className="lp-plan-stat-value">2 días</p>
+                      <p className="lp-plan-stat-value">1 día</p>
                     </div>
                     <div className="lp-plan-stat">
                       <p className="lp-plan-stat-label">
@@ -249,7 +249,7 @@ export function PagoNubeLandingPage() {
               <div className="lp-planes-actions">
                 <button
                   className="lp-btn-primary"
-                  onClick={() => navigate("/configuracion/activar-pago-nube")}
+                  onClick={() => navigate("/configuracion/activar-pago-nube", { state: { from: "/pago-nube" } })}
                 >
                   Configurar
                 </button>

@@ -17,7 +17,7 @@ function App() {
     <OnboardingProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<WelcomePage />} />
+          <Route path="/" element={<Navigate to="/inicio" replace />} />
           <Route path="/inicio" element={<InicioPage />} />
           <Route path="/pago-nube" element={<PagoNubeLandingPage />} />
           <Route path="/configuracion/medios-pago" element={<MediosDePagoPage />} />
@@ -28,7 +28,7 @@ function App() {
           <Route path="/onboarding/cuenta-bancaria" element={<BankAccountPage />} />
           <Route path="/onboarding/revision" element={<ReviewPage />} />
           <Route path="/onboarding/sucesso" element={<SuccessPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/inicio" replace />} />
         </Routes>
       </BrowserRouter>
     </OnboardingProvider>

@@ -75,6 +75,31 @@
   color: #e53935;
 }
 
+.apn-valid-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #00875a;
+  font-weight: 500;
+}
+
+.apn-valid-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.apn-hint-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #9a5f00;
+}
+
 .apn-actions {
   display: flex;
   justify-content: flex-end;

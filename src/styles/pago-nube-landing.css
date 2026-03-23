@@ -385,19 +385,23 @@
 
 .lp-plan-stat-value {
   font-family: "Geist Variable", "Geist", sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: 32px;
-  color: #00935b;
+  color: rgba(0, 147, 91, 1);
   margin: 0;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
+.lp-plan-card-stats .lp-plan-stat:first-child .lp-plan-stat-value {
+  color: rgba(10, 10, 10, 1);
+}
+
 .lp-plan-stat-iva {
-  font-family: "Geist Variable";
-  font-size: 28px;
+  font-family: "Geist";
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: 32px;

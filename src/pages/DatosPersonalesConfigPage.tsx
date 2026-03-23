@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Input } from "@nimbus-ds/input";
 import { Button } from "@nimbus-ds/button";
+import { Spinner } from "@nimbus-ds/spinner";
 import { SettingsShell } from "../components/SettingsShell";
 import "../styles/datos-personales-config.css";
 
@@ -51,6 +52,14 @@ interface FormErrors {
 
 export function DatosPersonalesConfigPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = (location.state as { from?: string }) ?? {};
+
+  const dayRef = useRef<HTMLInputElement>(null);
+  const monthRef = useRef<HTMLInputElement>(null);
+  const yearRef = useRef<HTMLInputElement>(null);
+
+  const [dateParts, setDateParts] = useState({ day: "", month: "", year: "" });
 
   const [formData, setFormData] = useState<FormData>({
     nombre: "",
@@ -69,38 +78,100 @@ export function DatosPersonalesConfigPage() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormErrors, boolean>>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateField = (field: keyof FormErrors, currentData?: FormData): string | undefined => {
+    const data = currentData ?? formData;
+    switch (field) {
+      case "nombre":
+        return !data.nombre.trim() ? "Nombre es obligatorio" : undefined;
+      case "apellido":
+        return !data.apellido.trim() ? "Apellido es obligatorio" : undefined;
+      case "telefono":
+        if (!data.telefono.trim()) return "Teléfono es obligatorio";
+        if (!/^\d{10}$/.test(data.telefono.replace(/\D/g, ""))) return "Ingresa 10 dígitos";
+        return undefined;
+      case "fechaNacimiento":
+        return !data.fechaNacimiento ? "Fecha de nacimiento es obligatoria" : undefined;
+      case "categoria":
+        return !data.categoria ? "Selecciona una categoría" : undefined;
+      case "calle":
+        return !data.calle.trim() ? "Calle es obligatoria" : undefined;
+      case "numero":
+        return !data.sinNumero && !data.numero.trim()
+          ? "Ingresa un número o marca Sin número"
+          : undefined;
+      case "codigoPostal":
+        return !data.codigoPostal || data.codigoPostal.length < 5
+          ? "Código postal debe tener 5 dígitos"
+          : undefined;
+      default:
+        return undefined;
+    }
+  };
+
+  const handleBlur = (field: keyof FormErrors) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    const error = validateField(field);
+    setErrors((prev) => ({ ...prev, [field]: error }));
+  };
 
   const handleChange = (field: keyof FormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    const updatedData = { ...formData, [field]: value };
+    setFormData(updatedData);
+    if (touched[field as keyof FormErrors]) {
+      const error = validateField(field as keyof FormErrors, updatedData);
+      setErrors((prev) => ({ ...prev, [field]: error }));
     }
   };
 
   const handleCodigoPostal = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 5);
-    setFormData((prev) => ({ ...prev, codigoPostal: digits }));
-    if (errors.codigoPostal) {
-      setErrors((prev) => ({ ...prev, codigoPostal: undefined }));
+    const updatedData: FormData = digits.length === 5
+      ? { ...formData, codigoPostal: digits, estado: "Ciudad de México", municipio: "Cuauhtémoc", colonia: "Centro Histórico" }
+      : { ...formData, codigoPostal: digits, estado: "", municipio: "", colonia: "" };
+
+    setFormData(updatedData);
+
+    if (touched.codigoPostal) {
+      const error = validateField("codigoPostal", updatedData);
+      setErrors((prev) => ({ ...prev, codigoPostal: error }));
     }
-    // Mock auto-fill for Estado/Municipio/Colonia when 5 digits are entered
-    if (digits.length === 5) {
-      setFormData((prev) => ({
-        ...prev,
-        codigoPostal: digits,
-        estado: "Ciudad de México",
-        municipio: "Cuauhtémoc",
-        colonia: "Centro Histórico",
-      }));
+  };
+
+  const syncFechaNacimiento = (day: string, month: string, year: string) => {
+    if (day.length === 2 && month.length === 2 && year.length === 4) {
+      handleChange("fechaNacimiento", `${year}-${month}-${day}`);
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        codigoPostal: digits,
-        estado: "",
-        municipio: "",
-        colonia: "",
-      }));
+      handleChange("fechaNacimiento", "");
     }
+  };
+
+  const handleDateDay = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+    setDateParts((prev) => ({ ...prev, day: val }));
+    if (val.length === 2) monthRef.current?.focus();
+    syncFechaNacimiento(val, dateParts.month, dateParts.year);
+  };
+
+  const handleDateMonth = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 2);
+    setDateParts((prev) => ({ ...prev, month: val }));
+    if (val.length === 2) yearRef.current?.focus();
+    syncFechaNacimiento(dateParts.day, val, dateParts.year);
+  };
+
+  const handleDateYear = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+    setDateParts((prev) => ({ ...prev, year: val }));
+    syncFechaNacimiento(dateParts.day, dateParts.month, val);
+  };
+
+  const handleDateBlur = () => {
+    setTouched((prev) => ({ ...prev, fechaNacimiento: true }));
+    const error = validateField("fechaNacimiento");
+    setErrors((prev) => ({ ...prev, fechaNacimiento: error }));
   };
 
   const isFormValid =
@@ -113,7 +184,7 @@ export function DatosPersonalesConfigPage() {
     (formData.sinNumero || formData.numero.trim() !== "") &&
     formData.codigoPostal.length === 5;
 
-  const validate = (): boolean => {
+  const validate = (): FormErrors | null => {
     const newErrors: FormErrors = {};
 
     if (!formData.nombre.trim()) newErrors.nombre = "Nombre es obligatorio";
@@ -132,25 +203,56 @@ export function DatosPersonalesConfigPage() {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length > 0 ? newErrors : null;
   };
 
   const handleGuardar = () => {
-    navigate("/configuracion/activar-pago-nube");
+    navigate("/configuracion/activar-pago-nube", { state: { from } });
   };
 
   const handleEnviar = () => {
-    if (validate()) {
+    const validationErrors = validate();
+    if (validationErrors) {
+      setTouched({
+        nombre: true,
+        apellido: true,
+        telefono: true,
+        fechaNacimiento: true,
+        categoria: true,
+        calle: true,
+        numero: true,
+        codigoPostal: true,
+      });
+      const fieldOrder: Array<[keyof FormErrors, string]> = [
+        ["nombre", "dpcp-nombre"],
+        ["apellido", "dpcp-apellido"],
+        ["telefono", "dpcp-telefono"],
+        ["fechaNacimiento", "dpcp-fecha"],
+        ["categoria", "dpcp-categoria"],
+        ["calle", "dpcp-calle"],
+        ["numero", "dpcp-numero"],
+        ["codigoPostal", "dpcp-cp"],
+      ];
+      for (const [key, id] of fieldOrder) {
+        if (validationErrors[key]) {
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+          break;
+        }
+      }
+      return;
+    }
+    setIsLoading(true);
+    setTimeout(() => {
       localStorage.setItem("pagoNubeActivated", "true");
       navigate("/configuracion/medios-pago", {
         state: { pagoNubeActivated: true },
       });
-    }
+    }, 1500);
   };
 
   return (
     <SettingsShell
-      onBack={() => navigate("/configuracion/activar-pago-nube")}
+      onBack={() => navigate("/configuracion/activar-pago-nube", { state: { from } })}
       backLabel="Volver"
     >
       <div className="dpcp-page">
@@ -175,6 +277,7 @@ export function DatosPersonalesConfigPage() {
               placeholder="Ingresa tu nombre"
               value={formData.nombre}
               onChange={(e) => handleChange("nombre", e.target.value)}
+              onBlur={() => handleBlur("nombre")}
               autoComplete="given-name"
             />
             {errors.nombre && (
@@ -194,6 +297,7 @@ export function DatosPersonalesConfigPage() {
               placeholder="Ingresa tu apellido"
               value={formData.apellido}
               onChange={(e) => handleChange("apellido", e.target.value)}
+              onBlur={() => handleBlur("apellido")}
               autoComplete="family-name"
             />
             {errors.apellido && (
@@ -232,6 +336,7 @@ export function DatosPersonalesConfigPage() {
                 placeholder="222 222 2222"
                 value={formData.telefono}
                 onChange={(e) => handleChange("telefono", e.target.value)}
+                onBlur={() => handleBlur("telefono")}
                 maxLength={10}
                 autoComplete="tel"
               />
@@ -243,23 +348,67 @@ export function DatosPersonalesConfigPage() {
 
           {/* Fecha de nacimiento */}
           <div className="dpcp-field">
-            <label htmlFor="dpcp-fecha" className="dpcp-field-label">
-              Fecha de nacimiento
-            </label>
-            <input
+            <label className="dpcp-field-label">Fecha de nacimiento</label>
+            <div
               id="dpcp-fecha"
-              type="date"
-              className={`dpcp-date-input${errors.fechaNacimiento ? " dpcp-date-input--danger" : ""}`}
-              value={formData.fechaNacimiento}
-              min="1900-01-01"
-              max="9999-12-31"
-              onChange={(e) => {
-                const val = e.target.value;
-                const year = val.split("-")[0];
-                if (year && year.length > 4) return;
-                handleChange("fechaNacimiento", val);
-              }}
-            />
+              className={`dpcp-date-parts${errors.fechaNacimiento ? " dpcp-date-parts--danger" : ""}`}
+              role="group"
+              aria-label="Fecha de nacimiento"
+            >
+              <input
+                ref={dayRef}
+                type="text"
+                inputMode="numeric"
+                className="dpcp-date-part"
+                placeholder="DD"
+                value={dateParts.day}
+                onChange={handleDateDay}
+                onBlur={handleDateBlur}
+                onKeyDown={(e) => {
+                  if (e.key === "Backspace" && dateParts.day === "") {
+                    dayRef.current?.focus();
+                  }
+                }}
+                maxLength={2}
+                aria-label="Día"
+              />
+              <span className="dpcp-date-sep">/</span>
+              <input
+                ref={monthRef}
+                type="text"
+                inputMode="numeric"
+                className="dpcp-date-part"
+                placeholder="MM"
+                value={dateParts.month}
+                onChange={handleDateMonth}
+                onBlur={handleDateBlur}
+                onKeyDown={(e) => {
+                  if (e.key === "Backspace" && dateParts.month === "") {
+                    dayRef.current?.focus();
+                  }
+                }}
+                maxLength={2}
+                aria-label="Mes"
+              />
+              <span className="dpcp-date-sep">/</span>
+              <input
+                ref={yearRef}
+                type="text"
+                inputMode="numeric"
+                className="dpcp-date-part dpcp-date-part--year"
+                placeholder="AAAA"
+                value={dateParts.year}
+                onChange={handleDateYear}
+                onBlur={handleDateBlur}
+                onKeyDown={(e) => {
+                  if (e.key === "Backspace" && dateParts.year === "") {
+                    monthRef.current?.focus();
+                  }
+                }}
+                maxLength={4}
+                aria-label="Año"
+              />
+            </div>
             {errors.fechaNacimiento && (
               <span className="dpcp-error-text">{errors.fechaNacimiento}</span>
             )}
@@ -275,6 +424,7 @@ export function DatosPersonalesConfigPage() {
               className={`dpcp-select${errors.categoria ? " dpcp-select--danger" : ""}`}
               value={formData.categoria}
               onChange={(e) => handleChange("categoria", e.target.value)}
+              onBlur={() => handleBlur("categoria")}
             >
               <option value="" disabled>
                 Selecciona una categoría
@@ -307,6 +457,7 @@ export function DatosPersonalesConfigPage() {
               placeholder=""
               value={formData.calle}
               onChange={(e) => handleChange("calle", e.target.value)}
+              onBlur={() => handleBlur("calle")}
               autoComplete="street-address"
             />
             {errors.calle && (
@@ -319,13 +470,14 @@ export function DatosPersonalesConfigPage() {
             <label htmlFor="dpcp-numero" className="dpcp-field-label">
               Número
             </label>
-            <Input
+              <Input
               id="dpcp-numero"
               appearance={errors.numero ? "danger" : "neutral"}
               type="text"
               placeholder="0"
               value={formData.sinNumero ? "" : formData.numero}
               onChange={(e) => handleChange("numero", e.target.value)}
+              onBlur={() => handleBlur("numero")}
               disabled={formData.sinNumero}
             />
             <div className="dpcp-checkbox-row">
@@ -360,6 +512,7 @@ export function DatosPersonalesConfigPage() {
               placeholder=""
               value={formData.codigoPostal}
               onChange={(e) => handleCodigoPostal(e.target.value)}
+              onBlur={() => handleBlur("codigoPostal")}
               maxLength={5}
               autoComplete="postal-code"
             />
@@ -435,10 +588,11 @@ export function DatosPersonalesConfigPage() {
             <Button
               appearance="primary"
               type="button"
-              disabled={!isFormValid}
+              disabled={!isFormValid || isLoading}
               onClick={handleEnviar}
             >
-              Enviar
+              {isLoading && <Spinner color="currentColor" size="small" />}
+              {isLoading ? "Enviando..." : "Enviar"}
             </Button>
           </div>
         </div>

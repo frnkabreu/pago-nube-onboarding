@@ -22,6 +22,7 @@
     "@nimbus-ds/input": "^2.6.1",
     "@nimbus-ds/link": "^4.4.0",
     "@nimbus-ds/sidebar": "^3.6.0",
+    "@nimbus-ds/spinner": "^3.2.0",
     "@nimbus-ds/styles": "^9.56.0",
     "@nimbus-ds/tag": "^2.4.1",
     "@nimbus-ds/text": "^6.6.1",
