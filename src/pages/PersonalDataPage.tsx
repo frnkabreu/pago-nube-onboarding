@@ -103,10 +103,10 @@ export function PersonalDataPage() {
               <Box
                 key={option.value}
                 as="button"
-                style={{ flex: "1 1 140px" }}
                 padding="3"
                 borderRadius="2"
                 style={{
+                  flex: "1 1 140px",
                   backgroundColor: formData.businessType === option.value ? "#e8f0fe" : "#fff",
                   border: formData.businessType === option.value ? "2px solid #0059d5" : "1px solid #e5e7eb",
                   cursor: "pointer",
