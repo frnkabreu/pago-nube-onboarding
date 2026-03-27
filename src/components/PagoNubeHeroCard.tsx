@@ -20,14 +20,15 @@ export function PagoNubeHeroCard({ activated = false, onDeactivate }: PagoNubeHe
   return (
     <div className="pago-nube-hero">
       <div className="pago-nube-hero-left">
-        <div className="pago-nube-hero-logo">
-          <span className="pago-nube-hero-logo-text">Pago Nube</span>
+        <div className="pago-nube-hero-text-block">
+          <div className="pago-nube-hero-logo">
+            <span className="pago-nube-hero-logo-text">Pago Nube</span>
+          </div>
+          <h2 className="pago-nube-hero-title">Cobra fácil y gana más</h2>
+          <p className="pago-nube-hero-description">
+            El procesador nativo de tu tienda ya está preinstalado.{" "}
+          </p>
         </div>
-
-        <h2 className="pago-nube-hero-title">Cobra fácil y gana más</h2>
-        <p className="pago-nube-hero-description">
-          El procesador nativo de tu tienda ya está preinstalado.{" "}
-        </p>
 
         <div className="pago-nube-hero-illustration-wrapper">
           <img
@@ -85,7 +86,7 @@ export function PagoNubeHeroCard({ activated = false, onDeactivate }: PagoNubeHe
           )
         ) : (
           <span className="pago-nube-hero-success-tag">
-            ¡Sin costo por Transacción externa!
+            ¡Sin costo por transacción!
           </span>
         )}
 

@@ -91,13 +91,13 @@ function PaymentIcon({ type }: { type: PaymentType }) {
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="currentColor"
-      style={{ transform: open ? "rotate(-90deg)" : "rotate(90deg)", transition: "transform 0.2s" }}
+      style={{ transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.2s" }}
     >
-      <path d="M6.44 4.44a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06L10.38 9 6.44 5.5a.75.75 0 0 1 0-1.06z" />
+      <path d="M9.29 6.71a.996.996 0 0 0 0 1.41L13.17 12l-3.88 3.88a.996.996 0 1 0 1.41 1.41l4.59-4.59a.996.996 0 0 0 0-1.41L10.7 6.7c-.38-.38-1.02-.38-1.41.01z" />
     </svg>
   );
 }
@@ -290,7 +290,7 @@ function ProviderCard({ provider }: { provider: ProviderData }) {
         <span className="ext-card-name">{provider.name}</span>
         <div className="ext-card-summary-right">
           <span className="ext-tag ext-tag--warning">
-            Costo por transacción: 2%
+            CPT: 2%
           </span>
           <span
             className={

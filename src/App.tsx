@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { OnboardingProvider } from "./contexts/OnboardingContext";
-import { WelcomePage } from "./pages/WelcomePage";
 import { PaymentMethodsPage } from "./pages/PaymentMethodsPage";
 import { PersonalDataPage } from "./pages/PersonalDataPage";
 import { BankAccountPage } from "./pages/BankAccountPage";

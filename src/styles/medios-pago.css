@@ -179,12 +179,15 @@
   margin: 0;
 }
 
-/* Wrapper transparente no desktop — filhos se posicionam relativos ao .pago-nube-hero-left */
+/* Wrappers transparentes no desktop — filhos se posicionam relativos ao .pago-nube-hero-left */
+.pago-nube-hero-text-block {
+  display: contents;
+}
+
 .pago-nube-hero-illustration-wrapper {
   display: contents;
 }
 
-/* Wrapper transparente no desktop — check tags posicionadas relativos ao .pago-nube-hero-left */
 .pago-nube-hero-check-tags {
   display: contents;
 }
@@ -692,9 +695,7 @@
 }
 
 .ext-card--special .ext-card-name {
-  font-size: 14px;
   font-weight: 600;
-  line-height: 20px;
 }
 
 .ext-card--special .ext-card-content {
@@ -705,20 +706,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
-  height: 52px;
+  padding: 16px;
   width: 100%;
   background: #fff;
   border: none;
   cursor: pointer;
   font-family: inherit;
   text-align: left;
-  gap: 12px;
+  gap: 8px;
 }
 
 .ext-card--special .ext-card-summary {
-  padding: 0 16px;
-  height: 52px;
+  padding: 16px;
 }
 
 .ext-card-summary:hover {
@@ -726,11 +725,13 @@
 }
 
 .ext-card-name {
-  font-size: 15.75px;
-  font-weight: 700;
-  line-height: 24.5px;
-  color: #101828;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #000b19;
   white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
 .ext-card-summary-right {
@@ -745,9 +746,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 17.5px;
-  height: 17.5px;
-  color: #6a7282;
+  width: 24px;
+  height: 24px;
+  color: #9ca3af;
   flex-shrink: 0;
 }
 
@@ -1304,10 +1305,11 @@
     flex-shrink: 0;
   }
 
-  /* ── Hero Card: switch to stacked layout ── */
+  /* ── Hero Card: layout empilhado ── */
   .pago-nube-hero {
     flex-direction: column;
     margin-bottom: 40px;
+    border-radius: 8px;
   }
 
   .pago-nube-hero-left {
@@ -1319,16 +1321,24 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     align-items: center;
   }
 
-  /* Convert all absolute-positioned elements to static flow */
+  /* Texto block (logo + título + descrição) — opacidade 0.8 no mobile */
+  .pago-nube-hero-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0.8;
+    width: 100%;
+    align-self: flex-start;
+  }
+
   .pago-nube-hero-logo {
     position: static;
     width: auto;
     height: auto;
-    align-self: flex-start;
   }
 
   .pago-nube-hero-title {
@@ -1337,7 +1347,6 @@
     font-size: 28px;
     line-height: 32px;
     margin: 0;
-    opacity: 0.8;
   }
 
   .pago-nube-hero-description {
@@ -1346,29 +1355,39 @@
     font-size: 14px;
     line-height: 20px;
     margin: 0;
-    opacity: 0.8;
   }
 
-  /* Illustration wrapper: display:block restaura o wrapper como caixa real no mobile */
+  /* Illustration wrapper: container real com posicionamento preciso (Figma pixel-perfect) */
   .pago-nube-hero-illustration-wrapper {
     display: block;
     position: relative;
-    width: 100%;
-    max-width: 251px;
-    margin: 8px auto 0;
+    width: 286px;
+    height: 206px;
+    flex-shrink: 0;
+    overflow: visible;
+    margin: 0 auto;
   }
 
   .pago-nube-hero-illustration-img {
-    position: static;
-    width: 100%;
+    position: absolute;
+    left: 35px;
+    top: 0;
+    width: 251px;
     height: auto;
   }
 
+  /* Badge visível no mobile posicionado à direita da ilustração */
   .pago-nube-hero-checkout-badge {
-    display: none;
+    display: block;
+    position: absolute;
+    left: 214px;
+    top: 18px;
+    width: 96px;
+    height: auto;
+    object-fit: contain;
   }
 
-  /* Green tag overlaid on illustration */
+  /* Tag verde sobreposta na ilustração */
   .pago-nube-hero-float-tag {
     position: absolute;
   }
@@ -1379,13 +1398,12 @@
     width: 120px;
   }
 
-  /* Check tags: display:flex restaura o wrapper como caixa real no mobile */
+  /* Check tags — layout real no mobile */
   .pago-nube-hero-check-tags {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    margin-top: 8px;
+    gap: 8px;
   }
 
   .pago-nube-hero-check-tag {
@@ -1408,8 +1426,10 @@
 
   .pago-nube-hero-methods {
     gap: 8px;
+    width: 100%;
   }
 
+  /* Cards de métodos: coluna (ícone+nome / comissão) */
   .pago-nube-method-card {
     height: auto;
     min-height: 60px;
@@ -1417,20 +1437,21 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
+    flex-wrap: nowrap;
   }
 
   .pago-nube-method-commission {
     white-space: normal;
   }
 
-  /* ── Activated alert ── */
+  /* ── Alert ativação ── */
   .pago-nube-activated-alert {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
   }
 
-  /* ── External providers: flat rows, no expansion ── */
+  /* ── Providers externos: cards flat sem expansão ── */
   .ext-card-content {
     display: none !important;
   }
@@ -1448,46 +1469,51 @@
     line-height: 24px;
   }
 
+  /* Cada card individual com bordas arredondadas (sem agrupamento) */
   .ext-card {
     border-radius: 12px;
+    border: none;
   }
 
   .ext-card-summary {
     padding: 16px;
-    cursor: pointer;
   }
 
-  .ext-tag--warning {
-    font-size: 12px;
-    padding: 2px 8px;
+  .ext-card-name {
+    white-space: normal;
+    flex: 1;
+    min-width: 0;
   }
 
-  .ext-callout-card {
-    border-radius: 8px;
-  }
-
-  .ext-providers-list {
-    gap: 16px;
-  }
-
-  .ext-providers-group {
-    gap: 16px;
-  }
-
+  /* Remover agrupamento do subgroup no mobile — cada card standalone */
   .ext-providers-subgroup {
-    gap: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 0 2px 0 var(--neutral-interactive-hover);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: unset;
+    overflow: visible;
+    box-shadow: none;
   }
 
   .ext-providers-subgroup .ext-card {
-    border-radius: 0;
-    box-shadow: none;
-    border-bottom: 1px solid var(--neutral-surface-highlight);
+    border-radius: 12px;
+    box-shadow: 0px 0px 2px 0px var(--neutral-interactive-hover);
+    border-bottom: none;
   }
 
   .ext-providers-subgroup .ext-card:last-child {
     border-bottom: none;
+  }
+
+  .ext-providers-list {
+    gap: 8px;
+  }
+
+  .ext-providers-group {
+    gap: 8px;
+  }
+
+  .ext-callout-card {
+    border-radius: 8px;
   }
 }
