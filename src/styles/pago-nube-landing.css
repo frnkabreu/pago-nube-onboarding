@@ -562,12 +562,13 @@
 
 /* ── Tablet / settings shell (≤1024px): layout adaptado ── */
 @media (max-width: 1024px) {
-  /* Detalle: empilha coluna de texto + imagem quando espaço insuficiente */
+  /* Detalle: empilha em coluna — imagem sobe para entre título e accordion */
   .lp-detalle-group {
     flex-direction: column;
   }
 
   .lp-detalle-image-wrap {
+    order: -1;
     width: 100%;
     height: 300px;
     flex-shrink: 1;
