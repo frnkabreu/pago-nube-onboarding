@@ -6,20 +6,16 @@
     <title>Pago Nube Onboarding</title>
     <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
     <script>
-      // Restaura path após redirect do 404.html (GitHub Pages SPA)
+      // Restaura path após redirect do 404.html (GitHub Pages SPA routing)
       (function() {
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
         if (redirect && redirect !== location.href) {
-          history.replaceState(null, null, redirect);
-        }
-        var q = window.location.search;
-        if (q && q.indexOf('?p=') === 0) {
-          window.history.replaceState(
-            null, null,
-            q.slice(3).replace(/~and~/g, '&') +
-            window.location.hash
-          );
+          var url = new URL(redirect);
+          var path = url.pathname + url.search + url.hash;
+          if (path && path !== '/') {
+            history.replaceState(null, null, path);
+          }
         }
       })();
     </script>
