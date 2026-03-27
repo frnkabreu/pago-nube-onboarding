@@ -242,8 +242,9 @@ function PaymentMethodCard({ method, selected, onToggle }: PaymentMethodCardProp
       padding="4"
       borderRadius="2"
       display="flex"
-      alignItems="center"
+      alignItems="flex-start"
       gap="3"
+      flexWrap="wrap"
       style={{
         backgroundColor: "#fff",
         border: selected ? "2px solid #0059d5" : "1px solid #e5e7eb",
@@ -253,7 +254,7 @@ function PaymentMethodCard({ method, selected, onToggle }: PaymentMethodCardProp
       onClick={onToggle}
     >
       {/* Checkbox */}
-      <Box flexShrink="0">
+      <Box flexShrink="0" style={{ paddingTop: "2px" }}>
         <Checkbox 
           name={method.id}
           checked={selected} 
@@ -276,8 +277,8 @@ function PaymentMethodCard({ method, selected, onToggle }: PaymentMethodCardProp
       </Box>
 
       {/* Content */}
-      <Box flex="1">
-        <Box display="flex" alignItems="center" gap="2" marginBottom="1">
+      <Box flex="1" style={{ minWidth: "160px" }}>
+        <Box display="flex" alignItems="center" gap="2" marginBottom="1" flexWrap="wrap">
           <Text fontWeight="bold">{method.name}</Text>
           {method.status === "recommended" && (
             <Tag appearance="success">Recomendado</Tag>
@@ -289,7 +290,7 @@ function PaymentMethodCard({ method, selected, onToggle }: PaymentMethodCardProp
       </Box>
 
       {/* Pricing */}
-      <Box textAlign="right" flexShrink="0">
+      <Box style={{ minWidth: "80px" }} textAlign="right" flexShrink="0">
         <Text fontSize="caption" color="neutral-textLow">
           Comisión
         </Text>

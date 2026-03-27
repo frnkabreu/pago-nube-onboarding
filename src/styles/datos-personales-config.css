@@ -236,4 +236,29 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .dpcp-page {
+    padding: 0 16px 16px 16px;
+  }
+
+  .dpcp-card {
+    padding: 16px;
+  }
+
+  .dpcp-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .dpcp-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .dpcp-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

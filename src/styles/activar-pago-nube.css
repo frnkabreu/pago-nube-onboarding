@@ -105,4 +105,25 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .apn-page {
+    padding: 16px;
+  }
+
+  .apn-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .apn-card {
+    padding: 16px;
+  }
+
+  .apn-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

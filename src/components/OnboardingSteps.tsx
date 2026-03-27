@@ -17,6 +17,7 @@ interface StepConfig {
   icon: React.ComponentType<any>;
   description?: string;
   cta?: { label: string; href?: string };
+  secondaryLink?: { label: string; href: string };
 }
 
 const steps: StepConfig[] = [
@@ -47,6 +48,7 @@ const steps: StepConfig[] = [
     description:
       "Cobra tus ventas con el método de pago de Tiendanube: seguro, con alta tasa de aprobación y ¡sin costos por transacción!",
     cta: { label: "Configurar Pago Nube", href: "/configuracion/medios-pago" },
+    secondaryLink: { label: "Más información", href: "/pago-nube" },
   },
 ];
 
@@ -113,24 +115,22 @@ export function OnboardingSteps() {
                     <p className="accordion-description">{step.description}</p>
                   )}
                   {isOpen && step.cta && (
-                    step.cta.href
-                      ? (
-                        <a
-                          href={step.cta.href}
-                          className="accordion-cta"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                    <div className="accordion-actions" onClick={(e) => e.stopPropagation()}>
+                      {step.cta.href ? (
+                        <a href={step.cta.href} className="accordion-cta">
                           {step.cta.label}
                         </a>
-                      )
-                      : (
-                        <button
-                          className="accordion-cta"
-                          onClick={(e) => e.stopPropagation()}
-                        >
+                      ) : (
+                        <button className="accordion-cta">
                           {step.cta.label}
                         </button>
-                      )
+                      )}
+                      {step.secondaryLink && (
+                        <a href={step.secondaryLink.href} className="accordion-cta-secondary">
+                          {step.secondaryLink.label}
+                        </a>
+                      )}
+                    </div>
                   )}
                 </div>
                 <span className={`accordion-chevron${isOpen ? " open" : ""}`}>

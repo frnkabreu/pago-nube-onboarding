@@ -1277,6 +1277,54 @@
 /* ─────────────────────────────────────────────
    MOBILE — max-width: 768px
    ───────────────────────────────────────────── */
+/* ── Tablet: hero empilha mais cedo (settings-sidebar 240px + page padding consome espaço) ── */
+@media (max-width: 960px) {
+  .pago-nube-hero {
+    flex-direction: column;
+  }
+
+  .pago-nube-hero-left {
+    width: 100%;
+    min-width: unset;
+    min-height: unset;
+    position: relative;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .pago-nube-hero-logo {
+    position: static;
+    width: auto;
+    height: auto;
+  }
+
+  .pago-nube-hero-title {
+    position: static;
+    width: 100%;
+    font-size: 28px;
+    line-height: 32px;
+    margin: 0;
+  }
+
+  .pago-nube-hero-description {
+    position: static;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+  }
+
+  .pago-nube-hero-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+}
+
 @media (max-width: 768px) {
 
   /* ── Page ── */

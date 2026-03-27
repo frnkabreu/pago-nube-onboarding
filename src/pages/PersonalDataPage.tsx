@@ -94,7 +94,7 @@ export function PersonalDataPage() {
               Tipo de persona
             </Text>
           </Box>
-          <Box display="flex" gap="3">
+          <Box display="flex" gap="3" flexWrap="wrap">
             {[
               { value: "MEI", label: "Persona Física con Actividad Empresarial" },
               { value: "PF", label: "Persona Física" },
@@ -103,7 +103,7 @@ export function PersonalDataPage() {
               <Box
                 key={option.value}
                 as="button"
-                flex="1"
+                style={{ flex: "1 1 140px" }}
                 padding="3"
                 borderRadius="2"
                 style={{

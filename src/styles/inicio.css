@@ -678,6 +678,36 @@
   background: var(--primary-interactive-hover);
 }
 
+.accordion-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.accordion-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--primary-interactive);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.accordion-cta-secondary:hover {
+  background: var(--primary-surface);
+}
+
 /* ── Accordion — estado aberto ── */
 .accordion-item.open .accordion-header {
   display: flex;
@@ -847,7 +877,31 @@
     display: none;
   }
 
+  .settings-sidebar {
+    display: none;
+  }
+
   .main-area {
     width: 100%;
+  }
+
+  .confirm-card-inner {
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+  }
+
+  .confirm-card-link {
+    white-space: normal;
+    flex-shrink: 1;
+  }
+
+  .step-done {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .step-done-link {
+    white-space: normal;
+    flex-shrink: 1;
   }
 }

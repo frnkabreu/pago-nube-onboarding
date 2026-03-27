@@ -560,6 +560,25 @@
   flex-shrink: 0;
 }
 
+/* ── Tablet (769px – 1024px): benefício e plano cards com wrap ── */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .lp-cards-grid {
+    flex-wrap: wrap;
+  }
+
+  .lp-benefit-card {
+    flex: 1 1 280px;
+  }
+
+  .lp-plan-cards {
+    flex-wrap: wrap;
+  }
+
+  .lp-plan-card {
+    flex: 1 1 260px;
+  }
+}
+
 /* ── Responsive ─────────────────── */
 @media (max-width: 768px) {
   .lp-page {
