@@ -1,0 +1,39 @@
+---
+description: Auto-publish para o portal interno da TiendaNube
+alwaysApply: true
+---
+
+# Git Publish — Portal Pago Nube Onboarding
+
+## PUBLISH RULE
+
+Sempre que o usuário pedir para "publicar", "compartilhar com o time" ou "fazer deploy":
+
+1. Garantir que as alterações estão commitadas
+2. Verificar o remote: `git remote -v`
+3. Fetch latest: `git fetch tiendanube`
+4. Push: `git push tiendanube main`
+5. Aguardar ~1 minuto e confirmar o link do Pages
+
+## Repo Info
+
+- **Repo:** TiendaNube/pago-nube-onboarding
+- **Remote local:** `tiendanube`
+- **Branch:** main
+- **Author:** frnkabreu <frnkabreu@users.noreply.github.com>
+- **GitHub Pages:** https://didactic-adventure-e4vgqyz.pages.github.io/
+
+## Workflow de publish
+
+1. `git remote -v` — verificar que `tiendanube` aponta para TiendaNube/pago-nube-onboarding
+2. `git fetch tiendanube`
+3. `git push tiendanube main`
+4. Se push falhar, pull com `--rebase` e push novamente
+5. Confirmar o link: https://didactic-adventure-e4vgqyz.pages.github.io/
+
+## Importante
+
+- Nunca commitar `.env`, credenciais ou dados sensíveis
+- O GitHub Actions faz o build automaticamente a cada push
+- O deploy leva ~1 minuto após o push
+- Apenas membros da org TiendaNube conseguem acessar o link

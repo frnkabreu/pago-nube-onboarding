@@ -1,0 +1,21 @@
+---
+description: Onde está o repositório de produção e como acessá-lo
+alwaysApply: true
+---
+
+# GitHub Repo Awareness
+
+Este projeto tem um repositório interno na TiendaNube para compartilhar com o time:
+
+- **Repo:** TiendaNube/pago-nube-onboarding
+- **Visibility:** Internal (apenas membros da org TiendaNube)
+- **Clone local:** /Users/nuver/Documents/Cursor 2/pago-nube-onboarding/
+- **GitHub Pages:** https://didactic-adventure-e4vgqyz.pages.github.io/
+- **Remote:** `tiendanube` → https://github.com/TiendaNube/pago-nube-onboarding.git
+
+## Ao receber pedido de commit/push para o time
+
+1. Fazer as alterações no projeto local
+2. Commitar com mensagem descritiva
+3. Push para `tiendanube main` (não para origin)
+4. Aguardar ~1 minuto e informar o link do Pages
