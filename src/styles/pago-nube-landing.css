@@ -560,6 +560,29 @@
   flex-shrink: 0;
 }
 
+/* ── Tablet / settings shell (≤1024px): layout adaptado ── */
+@media (max-width: 1024px) {
+  /* Detalle: empilha coluna de texto + imagem quando espaço insuficiente */
+  .lp-detalle-group {
+    flex-direction: column;
+  }
+
+  .lp-detalle-image-wrap {
+    width: 100%;
+    height: 300px;
+    flex-shrink: 1;
+  }
+
+  .lp-detalle-img {
+    position: static;
+    width: 100%;
+    height: 100%;
+    top: auto;
+    left: auto;
+    object-fit: contain;
+  }
+}
+
 /* ── Tablet (769px – 1024px): benefício e plano cards com wrap ── */
 @media (max-width: 1024px) and (min-width: 769px) {
   .lp-cards-grid {
@@ -608,13 +631,8 @@
     flex-direction: column;
   }
 
-  .lp-detalle-group {
-    flex-direction: column;
-  }
-
   .lp-detalle-image-wrap {
-    width: 100%;
-    height: 260px;
+    height: 240px;
   }
 
   .lp-plan-cards {
