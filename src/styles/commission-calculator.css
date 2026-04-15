@@ -1,0 +1,542 @@
+/* ── Commission Calculator Modal ─────────────────────────────────────────── */
+
+/* Overlay */
+.cc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: cc-overlay-in 0.15s ease;
+}
+
+@keyframes cc-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Modal container */
+.cc-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  animation: cc-modal-in 0.2s cubic-bezier(0.34, 1.2, 0.64, 1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+@keyframes cc-modal-in {
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.cc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cc-header-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.cc-header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.cc-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.cc-close-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* ── Subtitle ────────────────────────────────────────────────────────────── */
+
+.cc-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 20px 0;
+}
+
+/* ── Form ────────────────────────────────────────────────────────────────── */
+
+.cc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cc-field-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cc-field-label--light {
+  font-weight: 400;
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.cc-field-error {
+  font-size: 12px;
+  color: #c91432;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* MXN unified input */
+.cc-mxn-input {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 14px;
+  height: 48px;
+  gap: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.cc-mxn-input:focus-within {
+  border-color: #0050c3;
+  box-shadow: 0 0 0 3px rgba(0, 80, 195, 0.1);
+}
+
+.cc-mxn-input--error {
+  border-color: #c91432;
+}
+
+.cc-mxn-input--error:focus-within {
+  border-color: #c91432;
+  box-shadow: 0 0 0 3px rgba(201, 20, 50, 0.1);
+}
+
+.cc-mxn-prefix {
+  font-size: 15px;
+  color: #374151;
+  font-weight: 500;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.cc-mxn-number {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  color: #111827;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.cc-mxn-number::placeholder {
+  color: #9ca3af;
+}
+
+.cc-mxn-number::-webkit-outer-spin-button,
+.cc-mxn-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cc-mxn-number[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Select dropdown */
+.cc-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-color: #ffffff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 40px 0 14px;
+  height: 48px;
+  font-size: 14px;
+  color: #111827;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.cc-select:focus {
+  outline: none;
+  border-color: #0050c3;
+  box-shadow: 0 0 0 3px rgba(0, 80, 195, 0.1);
+}
+
+/* CTA button */
+.cc-form-footer {
+  margin-top: 4px;
+}
+
+.cc-btn-calcular {
+  background: #0059d5;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cc-btn-calcular:hover:not(:disabled) {
+  background: #004bb3;
+}
+
+.cc-btn-calcular:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Results ─────────────────────────────────────────────────────────────── */
+
+.cc-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Method info bar */
+.cc-method-bar {
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.cc-method-bar strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ── Result Card ─────────────────────────────────────────────────────────── */
+
+/* Figma specs: border-radius 8.75px, padding 21px, gap 16px */
+.cc-result-card {
+  border-radius: 9px;
+  padding: 21px;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* PN: bg #eef5ff, border #0050c3 (Nimbus Blue) */
+.cc-result-card--pn {
+  background: #eef5ff;
+  border-color: #0050c3;
+}
+
+/* MP: bg white, border #e7e7e7 (neutral/surface-disabled) */
+.cc-result-card--mp {
+  background: #ffffff;
+  border-color: #e7e7e7;
+}
+
+/* Provider logo image (Mercado Pago) */
+.cc-provider-logo {
+  height: 24px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Pagonube text-only brand (no cloud icon) */
+.cc-provider-name-pn {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0059d5;
+  line-height: 1;
+  margin: 0;
+}
+
+/* Provider row */
+.cc-card-provider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* "Mejor opción" badge — Nimbus success tag pattern */
+.cc-badge-best {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #defef2;
+  border: 1px solid #00875a;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #00875a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* "RECIBES" label — Figma: 11px, semibold, #6b7280, uppercase, 0.5px tracking */
+.cc-card-receives-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+/* Amount + Detalles on same row */
+.cc-card-amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Figma spec: 24px, bold, line-height 24px */
+.cc-card-amount {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+/* PN amount: #16a34a (green) */
+.cc-card-amount--pn {
+  color: #16a34a;
+}
+
+/* MP amount: #1f2937 (dark gray, NOT black) */
+.cc-card-amount--mp {
+  color: #1f2937;
+}
+
+/* Detalles toggle — Figma: 12px, regular, #0050c3 / #0059d5 */
+.cc-detalles-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.cc-detalles-toggle:hover {
+  opacity: 0.75;
+}
+
+.cc-detalles-toggle--pn {
+  color: #0050c3;
+}
+
+.cc-detalles-toggle--mp {
+  color: #0059d5;
+}
+
+/* ── Details table ───────────────────────────────────────────────────────── */
+
+.cc-details-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cc-dt-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 10px 0 8px 0;
+}
+
+.cc-dt-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: #4b5563;
+  padding: 3px 0;
+  line-height: 1.45;
+}
+
+.cc-dt-row--bold {
+  font-weight: 700;
+  color: #111827;
+}
+
+.cc-dt-row--savings {
+  padding-top: 1px;
+}
+
+.cc-dt-val--highlight {
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+}
+
+.cc-dt-val--neg {
+  color: #374151;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cc-dt-val--pos {
+  color: #16a34a;
+  font-weight: 600;
+  text-align: right;
+}
+
+.cc-dt-val--red {
+  color: #dc2626;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cc-dt-savings {
+  color: #16a34a;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Results footer — two buttons side by side ───────────────────────────── */
+
+.cc-results-footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.cc-btn-recalculate {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #b0b0b0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #0a0a0a;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cc-btn-recalculate:hover {
+  background: #f6f6f6;
+}
+
+.cc-btn-recalculate svg {
+  width: 14px;
+  height: 14px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.cc-btn-activate {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  background: #0059d5;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #ffffff;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cc-btn-activate:hover {
+  background: #004bb3;
+}
+
+.cc-btn-activate svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}

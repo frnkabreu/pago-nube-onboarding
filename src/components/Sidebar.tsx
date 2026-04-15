@@ -85,6 +85,10 @@ export function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isActivated = localStorage.getItem("pagoNubeActivated") === "true";
+  const pagoNubeHref = isActivated ? "/dashboard" : "/pago-nube";
+  const dashboardRoutes = ["/dashboard", "/pagos", "/flujo-de-caja", "/ingresos-previstos", "/salud-pagos", "/extracto"];
+
   return (
     <aside className={`sidebar${isCollapsed ? " sidebar--collapsed" : ""}`}>
       <div className="sidebar-header">
@@ -145,15 +149,19 @@ export function Sidebar() {
                 : <div className="sidebar-section-title">{section.title}</div>
             )}
             {section.items.map((item) => {
-              const isActive = item.href
-                ? location.pathname === item.href
+              const resolvedHref = item.label === "Pago Nube" ? pagoNubeHref : item.href;
+              const isPagoNubeItem = item.label === "Pago Nube";
+              const isActive = resolvedHref
+                ? isPagoNubeItem
+                  ? location.pathname === "/pago-nube" || dashboardRoutes.some((r) => location.pathname.startsWith(r))
+                  : location.pathname === resolvedHref
                 : item.active;
               return (
               <button
                 key={item.label}
                 className={`sidebar-menu-item${isActive ? " active" : ""}`}
                 title={isCollapsed ? item.label : undefined}
-                onClick={item.href ? () => navigate(item.href!) : undefined}
+                onClick={resolvedHref ? () => navigate(resolvedHref) : undefined}
               >
                 <span className="menu-icon">
                   <item.icon size="small" />

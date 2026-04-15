@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Preview — Tela de Saldo</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0f1117;
+    color: #e4e8f0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Top bar ── */
+  #topbar {
+    background: #161b27;
+    border-bottom: 1px solid #1e2535;
+    padding: 0 16px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .dots { display: flex; gap: 6px; }
+  .dot  { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+
+  #url-bar {
+    flex: 1;
+    background: #0f1117;
+    border: 1px solid #2a3347;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: #8899bb;
+    font-family: monospace;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 600;
+    background: #0b1a3a;
+    color: #4e8cdc;
+    padding: 3px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  /* Resize buttons */
+  .resize-btns {
+    display: flex;
+    gap: 4px;
+  }
+  .resize-btn {
+    background: #1e2535;
+    border: 1px solid #2a3347;
+    color: #8899bb;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background .15s;
+    font-family: monospace;
+  }
+  .resize-btn:hover { background: #263044; color: #fff; }
+  .resize-btn.active { background: #0059d5; color: #fff; border-color: #0059d5; }
+
+  /* ── Main layout ── */
+  #workspace {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── iframe container ── */
+  #frame-area {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: #1a1f2e;
+    overflow: auto;
+    padding: 24px;
+  }
+
+  #frame-wrap {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    transition: width .3s ease;
+    flex-shrink: 0;
+  }
+
+  #app-frame {
+    border: none;
+    display: block;
+    width: 100%;
+    height: 820px;
+  }
+
+  /* ── Notes panel ── */
+  #notes-panel {
+    width: 280px;
+    min-width: 280px;
+    background: #161b27;
+    border-left: 1px solid #1e2535;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #notes-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #1e2535;
+    font-size: 12px;
+    font-weight: 700;
+    color: #8899bb;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dot-live {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #00c98d;
+    box-shadow: 0 0 6px #00c98d80;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .4; }
+  }
+
+  #notes-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .note-item {
+    background: #1e2535;
+    border: 1px solid #2a3347;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #8899bb;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    position: relative;
+  }
+  .note-item:hover { background: #263044; border-color: #3a4a6a; }
+  .note-item .note-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .note-item.area-layout  .note-label { color: #f0a500; }
+  .note-item.area-color   .note-label { color: #4e8cdc; }
+  .note-item.area-typo    .note-label { color: #00c98d; }
+  .note-item.area-spacing .note-label { color: #b06aff; }
+  .note-item .note-text { color: #cbd5e8; }
+
+  #notes-input-wrap {
+    padding: 12px;
+    border-top: 1px solid #1e2535;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #note-input {
+    width: 100%;
+    background: #0f1117;
+    border: 1px solid #2a3347;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #e4e8f0;
+    font-family: inherit;
+    resize: none;
+    height: 60px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  #note-input:focus { border-color: #0059d5; }
+  #note-input::placeholder { color: #2a3347; }
+
+  #btn-add-note {
+    background: #0059d5;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  #btn-add-note:hover { background: #0047ab; }
+
+  /* ── Status bar ── */
+  #statusbar {
+    background: #0a0c12;
+    border-top: 1px solid #1e2535;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 16px;
+    font-size: 11px;
+    color: #4a5568;
+    flex-shrink: 0;
+    font-family: monospace;
+  }
+  .sb-item { display: flex; align-items: center; gap: 5px; }
+  .sb-dot  { width: 6px; height: 6px; border-radius: 50%; }
+  .sb-ok   { background: #00c98d; }
+  .sb-info { color: #4e8cdc; }
+</style>
+</head>
+<body>
+
+<!-- ── Top bar ────────────────────────────────────────────────────────────── -->
+<div id="topbar">
+  <div class="dots">
+    <div class="dot dot-r"></div>
+    <div class="dot dot-y"></div>
+    <div class="dot dot-g"></div>
+  </div>
+  <div id="url-bar">http://localhost:5177/extracto</div>
+  <div class="tag">Extracto de Cuenta</div>
+  <div class="resize-btns">
+    <button class="resize-btn active" onclick="setWidth(390,  this)" title="Mobile">390</button>
+    <button class="resize-btn"        onclick="setWidth(768,  this)" title="Tablet">768</button>
+    <button class="resize-btn"        onclick="setWidth(1200, this)" title="Desktop">1200</button>
+    <button class="resize-btn"        onclick="setWidth('100%', this)" title="Full">Full</button>
+  </div>
+</div>
+
+<!-- ── Workspace ──────────────────────────────────────────────────────────── -->
+<div id="workspace">
+
+  <!-- iframe -->
+  <div id="frame-area">
+    <div id="frame-wrap" style="width:390px">
+      <iframe
+        id="app-frame"
+        src="http://localhost:5177/extracto"
+      ></iframe>
+    </div>
+  </div>
+
+  <!-- Painel de notas -->
+  <div id="notes-panel">
+    <div id="notes-header">
+      <div class="dot-live"></div>
+      Ajustes &amp; Notas
+    </div>
+
+    <div id="notes-list">
+      <div class="note-item area-layout">
+        <div class="note-label">Layout</div>
+        <div class="note-text">Troque de visualização com os botões 390 / 768 / 1200 no topo para verificar responsividade.</div>
+      </div>
+      <div class="note-item area-color">
+        <div class="note-label">Dica</div>
+        <div class="note-text">Inspecione o elemento no iframe clicando com botão direito → Inspecionar para ver detalhes de CSS.</div>
+      </div>
+      <div class="note-item area-typo">
+        <div class="note-label">Dados fictícios</div>
+        <div class="note-text">A tela está populada com 30 transações de teste para validação visual.</div>
+      </div>
+    </div>
+
+    <div id="notes-input-wrap">
+      <textarea id="note-input" placeholder="Descreva um ajuste que quer fazer…"></textarea>
+      <button id="btn-add-note" onclick="addNote()">+ Adicionar nota</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Status bar ─────────────────────────────────────────────────────────── -->
+<div id="statusbar">
+  <div class="sb-item"><div class="sb-dot sb-ok"></div> localhost:5177 conectado</div>
+  <div class="sb-item sb-info" id="sb-size">390 × 820</div>
+  <div class="sb-item" id="sb-count">3 notas</div>
+</div>
+
+<script>
+  // Injetar localStorage no iframe para simular Pago Nube ativado
+  const frame = document.getElementById('app-frame');
+  frame.addEventListener('load', () => {
+    try {
+      frame.contentWindow.localStorage.setItem('pagoNubeActivated', 'true');
+    } catch(e) {}
+  });
+
+  // Resize
+  function setWidth(w, btn) {
+    const wrap = document.getElementById('frame-wrap');
+    wrap.style.width = typeof w === 'number' ? w + 'px' : '100%';
+    document.querySelectorAll('.resize-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('sb-size').textContent =
+      (typeof w === 'number' ? w : 'Full') + ' × 820';
+  }
+
+  // Notas
+  let noteCount = 3;
+  const CATEGORIES = [
+    { key: 'area-layout',  label: 'Layout'   },
+    { key: 'area-color',   label: 'Cor'      },
+    { key: 'area-typo',    label: 'Tipografia' },
+    { key: 'area-spacing', label: 'Espaçamento' },
+  ];
+
+  function addNote() {
+    const input = document.getElementById('note-input');
+    const text  = input.value.trim();
+    if (!text) return;
+
+    noteCount++;
+    const cat  = CATEGORIES[noteCount % CATEGORIES.length];
+    const list = document.getElementById('notes-list');
+    const el   = document.createElement('div');
+    el.className = 'note-item ' + cat.key;
+    el.innerHTML = `
+      <div class="note-label">${cat.label}</div>
+      <div class="note-text">${text}</div>
+    `;
+    list.appendChild(el);
+    list.scrollTop = list.scrollHeight;
+    input.value = '';
+    document.getElementById('sb-count').textContent = noteCount + ' notas';
+  }
+
+  document.getElementById('note-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addNote(); }
+  });
+</script>
+</body>
+</html>

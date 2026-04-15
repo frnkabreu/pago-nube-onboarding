@@ -47,7 +47,7 @@ const steps: StepConfig[] = [
     icon: CreditCardIcon,
     description:
       "Cobra tus ventas con el método de pago de Tiendanube: seguro, con alta tasa de aprobación y ¡sin costos por transacción!",
-    cta: { label: "Configurar Pago Nube", href: "/configuracion/medios-pago" },
+    cta: { label: "Configurar Pago Nube", href: "/configuracion/activar-pago-nube" },
     secondaryLink: { label: "Más información", href: "/pago-nube" },
   },
 ];

@@ -11,6 +11,7 @@ import {
 } from "@nimbus-ds/icons";
 import { Sidebar } from "../components/Sidebar";
 import { AppHeader } from "../components/AppHeader";
+import { CommissionCalculator } from "../components/CommissionCalculator";
 import "../styles/pago-nube-landing.css";
 
 const benefitCards = [
@@ -88,6 +89,7 @@ const faqItems = [
 export function PagoNubeLandingPage() {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
 
   return (
     <div className="app-shell">
@@ -125,7 +127,10 @@ export function PagoNubeLandingPage() {
                   >
                     Configurar
                   </button>
-                  <button className="lp-btn-secondary">
+                  <button
+                    className="lp-btn-secondary"
+                    onClick={() => setCalculatorOpen(true)}
+                  >
                     <CalculatorIcon size="small" />
                     Calculadora de comisiones
                   </button>
@@ -253,7 +258,10 @@ export function PagoNubeLandingPage() {
                 >
                   Configurar
                 </button>
-                <button className="lp-btn-secondary">
+                <button
+                  className="lp-btn-secondary"
+                  onClick={() => setCalculatorOpen(true)}
+                >
                   <CalculatorIcon size="small" />
                   Calculadora de comisiones
                 </button>
@@ -303,6 +311,11 @@ export function PagoNubeLandingPage() {
           </div>
         </div>
       </div>
+
+      <CommissionCalculator
+        isOpen={calculatorOpen}
+        onClose={() => setCalculatorOpen(false)}
+      />
     </div>
   );
 }

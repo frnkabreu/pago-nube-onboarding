@@ -244,7 +244,7 @@ export function DatosPersonalesConfigPage() {
     setIsLoading(true);
     setTimeout(() => {
       localStorage.setItem("pagoNubeActivated", "true");
-      navigate("/configuracion/medios-pago", {
+      navigate("/dashboard", {
         state: { pagoNubeActivated: true },
       });
     }, 1500);

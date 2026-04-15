@@ -1,0 +1,240 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Design tokens alinhados com Nimbus DS ──────────────────────────────── */
+:root {
+  /* Core – cores alinhadas com nimbus-colors */
+  --background: #f6f6f6;             /* nimbus neutral-surface */
+  --foreground: #0a0a0a;             /* nimbus neutral-text-high */
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+
+  /* Primary – nimbus primary-interactive */
+  --primary: #0059d5;
+  --primary-foreground: #ffffff;
+
+  /* Secondary / muted */
+  --secondary: #f6f6f6;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f6f6f6;
+  --muted-foreground: #5d5d5d;       /* nimbus neutral-text-low */
+
+  /* Accent – nimbus primary-surface */
+  --accent: #eef5ff;
+  --accent-foreground: #0059d5;
+
+  /* Destructive – nimbus danger-interactive */
+  --destructive: #c91432;
+  --destructive-foreground: #ffffff;
+
+  /* Borders / inputs */
+  --border: #e5e7eb;
+  --input: #b0b0b0;                  /* nimbus neutral-interactive */
+  --ring: #0059d5;
+
+  /* Semantic – alinhados com nimbus */
+  --success: #00875a;                /* nimbus success-interactive */
+  --success-foreground: #ffffff;
+  --success-muted: #defef2;          /* nimbus success-surface */
+
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --warning-muted: #fef3c7;
+
+  --info: #0059d5;
+  --info-foreground: #ffffff;
+  --info-muted: #eef5ff;             /* nimbus primary-surface */
+
+  --error: #c91432;                  /* nimbus danger-interactive */
+  --error-foreground: #ffffff;
+  --error-muted: #fce8ec;            /* nimbus danger-surface */
+
+  /* Charts */
+  --chart-1: #00875a;
+  --chart-2: #c91432;
+  --chart-3: #0059d5;
+  --chart-4: #f59e0b;
+  --chart-5: #8b5cf6;
+
+  /* Radius – nimbus shape-border-radius */
+  --radius: 0.5rem;                  /* 8px – nimbus radius-base */
+}
+
+@theme inline {
+  --font-sans: 'Geist', system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-muted: var(--success-muted);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-muted: var(--warning-muted);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-muted: var(--info-muted);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-muted: var(--error-muted);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Nota: removido `* { @apply border-border outline-ring/50 }` do @layer base
+   pois aplicava outline em TODOS os elementos da página. Os componentes shadcn/ui
+   já definem suas próprias bordas individualmente. */
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+/* KPI grid (dashboard — alinhado ao preview / DevTools) */
+.db-root {
+  display: block;
+}
+
+/* Header do dashboard — período (sem marca no subtítulo) */
+.db-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.db-header-brand {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  min-width: 0;
+  padding: 0.75rem 1rem 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .db-header-brand {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.db-header-sub {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  color: var(--muted-foreground);
+}
+
+.db-header-date-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  border-radius: var(--radius-sm);
+}
+
+.db-header-date-trigger:hover {
+  color: var(--foreground);
+}
+
+.db-header-date-trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--card), 0 0 0 4px var(--ring);
+}
+
+.db-header-date-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.db-header-date-icon {
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.db-header-date-trigger:hover .db-header-date-icon {
+  color: var(--primary);
+}
+
+.db-main {
+  display: block;
+}
+
+.db-card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.db-card--half {
+  min-width: 0;
+}
+
+.db-card-header {
+  margin-bottom: 0.75rem;
+}
+
+.db-card-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--card-foreground);
+}
+
+.db-card-subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+.db-chart-funnel-wrap {
+  width: 100%;
+  height: 300px;
+}
+
+/* Garantir texto do tooltip Recharts legível no fundo claro */
+.db-chart-funnel-wrap .recharts-default-tooltip {
+  color: var(--foreground) !important;
+}

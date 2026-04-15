@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fluxo de Ativação — Pago Nube</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0f1117;
+    color: #e4e8f0;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── Painel lateral ──────────────────────────────────────────────────── */
+  #panel {
+    width: 300px;
+    min-width: 300px;
+    background: #161b27;
+    border-right: 1px solid #1e2535;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  #panel-header {
+    padding: 20px 20px 14px;
+    border-bottom: 1px solid #1e2535;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: #0059d5;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .logo-text { font-size: 15px; font-weight: 700; color: #fff; }
+  .logo-sub  { font-size: 11px; color: #6b7a99; letter-spacing: .4px; text-transform: uppercase; }
+
+  /* ── Steps list ──────────────────────────────────────────────────────── */
+  #steps {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s;
+    position: relative;
+  }
+  .step:hover { background: #1e2535; }
+  .step.active { background: #0b1a3a; }
+  .step.done   { opacity: .7; }
+
+  .step-num {
+    width: 26px; height: 26px; min-width: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    transition: all .2s;
+  }
+  .step-num.idle   { background: #1e2535; color: #6b7a99; border: 2px solid #2a3347; }
+  .step-num.active { background: #0059d5; color: #fff;    border: 2px solid #0059d5; box-shadow: 0 0 10px #0059d540; }
+  .step-num.done   { background: #00875a; color: #fff;    border: 2px solid #00875a; }
+  .step-num.error  { background: #c91432; color: #fff;    border: 2px solid #c91432; }
+
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 600; color: #cbd5e8; line-height: 1.3; }
+  .step.active .step-title { color: #fff; }
+  .step.done   .step-title { color: #6b7a99; }
+  .step-url { font-size: 11px; color: #4a5568; margin-top: 2px; font-family: monospace; }
+  .step.active .step-url { color: #4e8cdc; }
+
+  .step-detail {
+    font-size: 11.5px;
+    color: #4a5568;
+    margin-top: 6px;
+    line-height: 1.6;
+    display: none;
+  }
+  .step.active .step-detail { display: block; color: #8899bb; }
+
+  .step-connector {
+    width: 2px; height: 16px;
+    background: #1e2535;
+    margin-left: 22px;
+    border-radius: 1px;
+  }
+  .step-connector.done { background: #00875a; }
+
+  /* ── Progress bar ────────────────────────────────────────────────────── */
+  #progress-wrap {
+    padding: 0 16px 8px;
+  }
+  #progress-bar-bg {
+    background: #1e2535;
+    border-radius: 99px;
+    height: 4px;
+    overflow: hidden;
+  }
+  #progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0059d5, #00b3ff);
+    border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  #progress-text {
+    font-size: 11px;
+    color: #6b7a99;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ── Controls ────────────────────────────────────────────────────────── */
+  #controls {
+    padding: 14px 16px 20px;
+    border-top: 1px solid #1e2535;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #btn-auto {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #0059d5;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .15s;
+  }
+  #btn-auto:hover:not(:disabled) { background: #0047ab; }
+  #btn-auto:disabled { opacity: .5; cursor: not-allowed; }
+
+  #btn-next, #btn-reset {
+    width: 100%;
+    padding: 9px;
+    border-radius: 8px;
+    border: 1px solid #2a3347;
+    background: #1e2535;
+    color: #cbd5e8;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  #btn-next:hover:not(:disabled)  { background: #263044; }
+  #btn-reset:hover { background: #263044; }
+  #btn-next:disabled { opacity: .4; cursor: not-allowed; }
+
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row > * { flex: 1; }
+
+  /* ── Status badge ────────────────────────────────────────────────────── */
+  #status-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 99px;
+    text-align: center;
+    letter-spacing: .3px;
+  }
+  #status-badge.idle    { background: #1e2535; color: #6b7a99; }
+  #status-badge.running { background: #0b1a3a; color: #4e8cdc; }
+  #status-badge.done    { background: #003d2b; color: #00c98d; }
+  #status-badge.error   { background: #3b0a12; color: #f66; }
+
+  /* ── Iframe area ─────────────────────────────────────────────────────── */
+  #iframe-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #iframe-toolbar {
+    background: #161b27;
+    border-bottom: 1px solid #1e2535;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+
+  #url-bar {
+    flex: 1;
+    background: #0f1117;
+    border: 1px solid #2a3347;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: #8899bb;
+    font-family: monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #step-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0059d5;
+    background: #0b1a3a;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  #app-frame {
+    flex: 1;
+    border: none;
+    width: 100%;
+    background: #fff;
+  }
+
+  /* ── Overlay de transição ────────────────────────────────────────────── */
+  #transition-overlay {
+    position: absolute;
+    inset: 40px 0 0 0;
+    background: rgba(15, 17, 23, .92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+    z-index: 10;
+  }
+  #transition-overlay.show { opacity: 1; pointer-events: all; }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid #1e2535;
+    border-top-color: #0059d5;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #transition-msg {
+    font-size: 14px;
+    color: #8899bb;
+    font-weight: 500;
+  }
+
+  /* ── Log console ─────────────────────────────────────────────────────── */
+  #log-bar {
+    background: #0a0c12;
+    border-top: 1px solid #1e2535;
+    height: 110px;
+    overflow-y: auto;
+    padding: 8px 14px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 11px;
+  }
+
+  .log-line { color: #4a5568; line-height: 1.7; }
+  .log-line.info  { color: #4e8cdc; }
+  .log-line.ok    { color: #00c98d; }
+  .log-line.warn  { color: #f0a500; }
+  .log-line.error { color: #f66; }
+  .log-ts { color: #2a3347; margin-right: 6px; }
+</style>
+</head>
+<body>
+
+<!-- ══ PAINEL LATERAL ══════════════════════════════════════════════════════ -->
+<aside id="panel">
+  <div id="panel-header">
+    <div class="logo-row">
+      <div class="logo-icon">🚀</div>
+      <div>
+        <div class="logo-text">Pago Nube</div>
+        <div class="logo-sub">Fluxo de Ativação</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="progress-wrap">
+    <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
+    <div id="progress-text">0 / 6 passos</div>
+  </div>
+
+  <div id="steps">
+    <!-- gerado via JS -->
+  </div>
+
+  <div id="controls">
+    <div id="status-badge" class="idle">● Aguardando início</div>
+    <button id="btn-auto">▶ Executar fluxo completo</button>
+    <div class="btn-row">
+      <button id="btn-next">Próximo passo →</button>
+      <button id="btn-reset">↺ Resetar</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ IFRAME AREA ═════════════════════════════════════════════════════════ -->
+<div id="iframe-wrap">
+  <div id="iframe-toolbar">
+    <div class="dot dot-r"></div>
+    <div class="dot dot-y"></div>
+    <div class="dot dot-g"></div>
+    <div id="url-bar">http://localhost:5177/inicio</div>
+    <div id="step-label">Passo 0 / 6</div>
+  </div>
+
+  <div id="transition-overlay">
+    <div class="spinner"></div>
+    <div id="transition-msg">Navegando…</div>
+  </div>
+
+  <iframe
+    id="app-frame"
+    src="http://localhost:5177/inicio"
+    allow="same-origin"
+  ></iframe>
+
+  <div id="log-bar">
+    <div class="log-line info"><span class="log-ts">[00:00]</span>Canvas de Ativação iniciado. Clique em "Executar fluxo completo" ou avance passo a passo.</div>
+  </div>
+</div>
+
+<script>
+const STEPS = [
+  {
+    title: "Página Inicial",
+    url:   "http://localhost:5177/inicio",
+    detail: "App carregado na página inicial do painel Pago Nube.",
+    action: null,
+  },
+  {
+    title: "Medios de Pago",
+    url:   "http://localhost:5177/configuracion/medios-pago",
+    detail: "Exibe o card de Pago Nube com o botão "Configurar".",
+    action: null,
+  },
+  {
+    title: "Inserir RFC",
+    url:   "http://localhost:5177/configuracion/activar-pago-nube",
+    detail: "Campo RFC preenchido com MECC900615AB1 e validado.",
+    action: async (frame) => {
+      await delay(600);
+      await runInFrame(frame, () => {
+        const input = document.querySelector('#apn-rfc');
+        if (input) {
+          input.value = 'MECC900615AB1';
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+    },
+  },
+  {
+    title: "Confirmação RFC → Verificando",
+    url:   null,
+    detail: "Clique em "Activar" — spinner de verificação por 1,5s.",
+    action: async (frame) => {
+      await delay(400);
+      await runInFrame(frame, () => {
+        const btn = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Activar'));
+        if (btn && !btn.disabled) btn.click();
+      });
+      await delay(2200);
+    },
+  },
+  {
+    title: "Dados Pessoais",
+    url:   "http://localhost:5177/configuracion/datos-personales",
+    detail: "Formulário preenchido: nome, telefone, data nasc., categoria, endereço.",
+    action: async (frame) => {
+      await delay(600);
+      await fillForm(frame);
+    },
+  },
+  {
+    title: "Dashboard Ativo 🎉",
+    url:   "http://localhost:5177/dashboard",
+    detail: "Pago Nube ativado! Dashboard financeiro com dados carregados.",
+    action: null,
+  },
+];
+
+/* ── Estado ──────────────────────────────────────────────────────────────── */
+let current = -1;
+let running  = false;
+
+const frame     = document.getElementById('app-frame');
+const overlay   = document.getElementById('transition-overlay');
+const transMsg  = document.getElementById('transition-msg');
+const urlBar    = document.getElementById('url-bar');
+const stepLabel = document.getElementById('step-label');
+const logBar    = document.getElementById('log-bar');
+const fill      = document.getElementById('progress-bar-fill');
+const progText  = document.getElementById('progress-text');
+const badge     = document.getElementById('status-badge');
+
+const btnAuto  = document.getElementById('btn-auto');
+const btnNext  = document.getElementById('btn-next');
+const btnReset = document.getElementById('btn-reset');
+
+/* ── Render steps ────────────────────────────────────────────────────────── */
+function renderSteps() {
+  const container = document.getElementById('steps');
+  container.innerHTML = '';
+  STEPS.forEach((s, i) => {
+    const wrap = document.createElement('div');
+
+    const state = i < current  ? 'done'
+                : i === current ? 'active'
+                :                 'idle';
+
+    wrap.innerHTML = `
+      <div class="step ${state === 'done' ? 'done' : ''} ${state === 'active' ? 'active' : ''}" data-i="${i}">
+        <div class="step-num ${state}">
+          ${state === 'done' ? '✓' : i + 1}
+        </div>
+        <div class="step-body">
+          <div class="step-title">${s.title}</div>
+          ${s.url ? `<div class="step-url">${s.url.replace('http://localhost:5177','')}</div>` : ''}
+          <div class="step-detail">${s.detail}</div>
+        </div>
+      </div>
+      ${i < STEPS.length - 1 ? `<div class="step-connector ${state === 'done' ? 'done' : ''}"></div>` : ''}
+    `;
+    container.appendChild(wrap);
+  });
+
+  // Progress
+  const done = Math.max(current, 0);
+  const pct  = current < 0 ? 0 : Math.round(((current + 1) / STEPS.length) * 100);
+  fill.style.width = pct + '%';
+  progText.textContent = `${Math.max(done, 0)} / ${STEPS.length} passos`;
+
+  // Url bar + label
+  const s = STEPS[current];
+  if (s?.url) urlBar.textContent = s.url;
+  stepLabel.textContent = current < 0 ? 'Passo 0 / ' + STEPS.length : `Passo ${current + 1} / ${STEPS.length}`;
+}
+
+/* ── Log ─────────────────────────────────────────────────────────────────── */
+function log(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = 'log-line ' + type;
+  const now = new Date();
+  const ts  = `${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  el.innerHTML = `<span class="log-ts">[${ts}]</span>${msg}`;
+  logBar.appendChild(el);
+  logBar.scrollTop = logBar.scrollHeight;
+}
+
+/* ── Badge ───────────────────────────────────────────────────────────────── */
+function setBadge(text, state) {
+  badge.textContent = text;
+  badge.className   = state;
+}
+
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function showOverlay(msg) {
+  transMsg.textContent = msg;
+  overlay.classList.add('show');
+}
+function hideOverlay() { overlay.classList.remove('show'); }
+
+function navigateFrame(url) {
+  return new Promise(resolve => {
+    showOverlay('Navegando para ' + url.replace('http://localhost:5177',''));
+    frame.src = url;
+    frame.onload = () => { hideOverlay(); resolve(); };
+    setTimeout(() => { hideOverlay(); resolve(); }, 5000); // fallback
+  });
+}
+
+async function runInFrame(frame, fn) {
+  try {
+    frame.contentWindow.eval(`(${fn.toString()})()`);
+  } catch(e) {
+    // cross-origin guard — ignorar silenciosamente
+  }
+}
+
+/* ── Preenchimento do formulário via injection ───────────────────────────── */
+async function fillForm(frame) {
+  const fields = [
+    ['#dpcp-nombre',   'Carlos',            500],
+    ['#dpcp-apellido', 'Mendoza',           500],
+    ['#dpcp-telefono', '5512345678',        500],
+  ];
+
+  for (const [sel, val, wait] of fields) {
+    await runInFrame(frame, new Function(`
+      var el = document.querySelector('${sel}');
+      if(el){ el.focus(); el.value = '${val}';
+              el.dispatchEvent(new Event('input',{bubbles:true}));
+              el.dispatchEvent(new Event('change',{bubbles:true})); }
+    `));
+    await delay(wait);
+    log(`Campo ${sel} preenchido com "${val}"`, 'info');
+  }
+
+  // Data de nascimento
+  const dateFields = [
+    ['input[placeholder="DD"]',   '15'],
+    ['input[placeholder="MM"]',   '06'],
+    ['input[placeholder="AAAA"]', '1990'],
+  ];
+  for (const [sel, val] of dateFields) {
+    await runInFrame(frame, new Function(`
+      var cont = document.querySelector('#dpcp-fecha');
+      var el = cont ? cont.querySelector('${sel}') : document.querySelector('#dpcp-fecha ${sel}');
+      if(el){ el.focus(); el.value='${val}';
+              el.dispatchEvent(new Event('input',{bubbles:true}));
+              el.dispatchEvent(new Event('change',{bubbles:true})); }
+    `));
+    await delay(300);
+  }
+  log('Data de nascimento: 15/06/1990', 'info');
+
+  // Categoria
+  await runInFrame(frame, new Function(`
+    var sel = document.querySelector('#dpcp-categoria');
+    if(sel){ sel.value = sel.options[1]?.value || sel.options[0]?.value;
+             sel.dispatchEvent(new Event('change',{bubbles:true})); }
+  `));
+  await delay(500);
+  log('Categoria selecionada', 'info');
+
+  // Endereço
+  const addrFields = [
+    ['#dpcp-calle',  'Av. Insurgentes Sur'],
+    ['#dpcp-numero', '100'],
+    ['#dpcp-cp',     '06000'],
+  ];
+  for (const [sel, val] of addrFields) {
+    await runInFrame(frame, new Function(`
+      var el = document.querySelector('${sel}');
+      if(el){ el.focus(); el.value='${val}';
+              el.dispatchEvent(new Event('input',{bubbles:true}));
+              el.dispatchEvent(new Event('change',{bubbles:true})); }
+    `));
+    await delay(500);
+    log(`Endereço ${sel} = "${val}"`, 'info');
+  }
+
+  await delay(1800); // aguarda auto-fill CEP
+
+  // Scroll e clica Enviar
+  log('Enviando formulário…', 'warn');
+  await runInFrame(frame, new Function(`
+    var btn = [...document.querySelectorAll('button')].find(b=>b.textContent.trim()==='Enviar');
+    if(btn && !btn.disabled){ btn.scrollIntoView({behavior:'smooth'}); setTimeout(()=>btn.click(),400); }
+  `));
+}
+
+/* ── Execução de um passo ────────────────────────────────────────────────── */
+async function execStep(i) {
+  const s = STEPS[i];
+  log(`▶ Passo ${i+1}: ${s.title}`, 'info');
+  setBadge('● Executando passo ' + (i+1), 'running');
+
+  if (s.url && frame.src !== s.url) {
+    await navigateFrame(s.url);
+    urlBar.textContent = s.url;
+    await delay(400);
+  }
+
+  if (s.action) {
+    await s.action(frame);
+  }
+
+  log(`✓ Passo ${i+1} concluído`, 'ok');
+}
+
+/* ── Avançar passo ───────────────────────────────────────────────────────── */
+async function nextStep() {
+  if (running) return;
+  const next = current + 1;
+  if (next >= STEPS.length) return;
+
+  running = true;
+  btnNext.disabled = true;
+  btnAuto.disabled = true;
+  current = next;
+  renderSteps();
+
+  await execStep(next);
+
+  // Passo 3 (RFC confirm) redireciona para dados pessoais automaticamente
+  if (next === 3) {
+    await delay(500);
+    current = 4;
+    renderSteps();
+    log('Redirecionado para /datos-personales', 'ok');
+    await execStep(4);
+    await delay(2800); // aguarda submit + redirect
+    current = 5;
+    renderSteps();
+    await navigateFrame(STEPS[5].url);
+    log('🎉 Dashboard ativado!', 'ok');
+  }
+
+  if (current >= STEPS.length - 1) {
+    setBadge('✅ Fluxo concluído!', 'done');
+    log('Fluxo completo — navegador livre para testes manuais.', 'ok');
+    btnNext.disabled = true;
+  } else {
+    setBadge('● Aguardando próximo passo', 'idle');
+    btnNext.disabled = false;
+  }
+
+  btnAuto.disabled = current >= STEPS.length - 1;
+  running = false;
+}
+
+/* ── Auto-run completo ───────────────────────────────────────────────────── */
+async function autoRun() {
+  if (running) return;
+  btnAuto.disabled = true;
+  btnNext.disabled = true;
+  setBadge('● Executando fluxo…', 'running');
+  log('▶▶ Iniciando fluxo automático completo', 'warn');
+
+  for (let i = current + 1; i < STEPS.length; i++) {
+    current = i;
+    renderSteps();
+    await execStep(i);
+
+    if (i === 3) {
+      // passo 3 já ativa → dados pessoais via action
+      await delay(600);
+      current = 4;
+      renderSteps();
+      log('Redirecionado para /datos-personales', 'ok');
+      // dados pessoais já preenchidos acima via RFC confirm
+      await delay(3500);
+      current = 5;
+      renderSteps();
+      await navigateFrame(STEPS[5].url);
+      log('🎉 Dashboard ativado!', 'ok');
+      break;
+    }
+
+    await delay(800);
+  }
+
+  setBadge('✅ Fluxo concluído!', 'done');
+  log('Fluxo completo — navegador livre para testes manuais.', 'ok');
+  btnAuto.disabled = true;
+  btnNext.disabled = true;
+  running = false;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+function reset() {
+  current = -1;
+  running = false;
+  renderSteps();
+  frame.src = 'http://localhost:5177/inicio';
+  urlBar.textContent = 'http://localhost:5177/inicio';
+  setBadge('● Aguardando início', 'idle');
+  btnAuto.disabled = false;
+  btnNext.disabled = false;
+  log('↺ Resetado — pronto para novo fluxo.', 'warn');
+  // limpar localStorage dentro do iframe após carregamento
+  frame.onload = () => {
+    try { frame.contentWindow.localStorage.removeItem('pagoNubeActivated'); } catch(e){}
+  };
+}
+
+/* ── Event listeners ─────────────────────────────────────────────────────── */
+btnAuto.addEventListener('click', autoRun);
+btnNext.addEventListener('click', nextStep);
+btnReset.addEventListener('click', reset);
+
+// Monitorar mudanças de URL no iframe
+setInterval(() => {
+  try {
+    const url = frame.contentWindow?.location?.href;
+    if (url && url !== urlBar.textContent) {
+      urlBar.textContent = url;
+    }
+  } catch(e) {}
+}, 500);
+
+/* ── Init ────────────────────────────────────────────────────────────────── */
+renderSteps();
+</script>
+</body>
+</html>

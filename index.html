@@ -6,16 +6,22 @@
     <title>Pago Nube Onboarding</title>
     <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
     <script>
-      // Restaura path após redirect do 404.html (GitHub Pages SPA routing)
+      // Restaura path após redirect do 404.html (GitHub Pages SPA routing).
+      // Só aplica se o redirect for do MESMO origin — evita sobrescrever o URL em
+      // localhost com um path guardado de outro deploy (ex.: GitHub Pages).
       (function() {
         var redirect = sessionStorage.redirect;
         delete sessionStorage.redirect;
-        if (redirect && redirect !== location.href) {
+        if (!redirect || redirect === location.href) return;
+        try {
           var url = new URL(redirect);
+          if (url.origin !== location.origin) return;
           var path = url.pathname + url.search + url.hash;
           if (path && path !== '/') {
             history.replaceState(null, null, path);
           }
+        } catch (e) {
+          /* ignore */
         }
       })();
     </script>

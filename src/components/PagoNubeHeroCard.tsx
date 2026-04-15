@@ -70,7 +70,7 @@ export function PagoNubeHeroCard({ activated = false, onDeactivate }: PagoNubeHe
                 </p>
                 <button
                   className="pago-nube-btn-primary pago-nube-btn-ir-pagos"
-                  onClick={() => navigate("/pago-nube")}
+                  onClick={() => navigate("/dashboard")}
                 >
                   Ir a pagos
                 </button>
@@ -132,7 +132,7 @@ export function PagoNubeHeroCard({ activated = false, onDeactivate }: PagoNubeHe
 
         {activated ? (
           <div className="pago-nube-hero-actions">
-            <Button appearance="transparent" type="button" onClick={() => navigate("/pago-nube")}>
+            <Button appearance="transparent" type="button" onClick={() => navigate("/dashboard")}>
               Ir a pagos
             </Button>
             <Button appearance="neutral" type="button" onClick={onDeactivate}>
@@ -141,7 +141,7 @@ export function PagoNubeHeroCard({ activated = false, onDeactivate }: PagoNubeHe
           </div>
         ) : (
           <div className="pago-nube-hero-actions">
-            <button className="pago-nube-btn-secondary">Más información</button>
+            <button className="pago-nube-btn-secondary" onClick={() => navigate("/pago-nube")}>Más información</button>
             <button
               className="pago-nube-btn-primary"
               onClick={() => navigate("/configuracion/activar-pago-nube", { state: { from: "/configuracion/medios-pago" } })}

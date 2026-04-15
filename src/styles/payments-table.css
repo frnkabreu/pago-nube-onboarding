@@ -1,0 +1,464 @@
+/* ── Payments Table ──────────────────────────────────────────────────────── */
+
+.pt-table {
+  width: 100%;
+}
+
+/* Title */
+.pt-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+  line-height: 1.3;
+}
+
+/* ── Toolbar wrapper — gives filter panel an anchor ───────────────────────── */
+
+.pt-toolbar-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* ── Toolbar (search + filter btn) ────────────────────────────────────────── */
+
+.pt-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Search wrapper */
+.pt-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.pt-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.pt-search-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 36px 0 38px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #111827;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+.pt-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.pt-search-input:focus {
+  border-color: #0059d5;
+  box-shadow: 0 0 0 3px rgba(0, 89, 213, 0.08);
+}
+
+.pt-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.pt-search-clear:hover { color: #374151; }
+
+/* Filter button */
+.pt-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pt-filter-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.pt-filter-btn--active {
+  border-color: #0059d5;
+  background: #eff6ff;
+  color: #0059d5;
+}
+
+.pt-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0059d5;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Filter panel — floats over content, does not shift layout ────────────── */
+
+.pt-filter-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 20;
+  min-width: 480px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+}
+
+.pt-filter-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.pt-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pt-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Nimbus Select dentro do filter field */
+.pt-filter-field select {
+  min-width: 160px;
+}
+
+.pt-filter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.pt-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.pt-clear-btn:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.pt-apply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.pt-apply-btn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* ── Table card ──────────────────────────────────────────────────────────── */
+
+.pt-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Scrollable wrapper for horizontal overflow on small screens */
+.pt-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pt-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  table-layout: fixed;
+}
+
+/* Fixed column widths — prevent resize on filter/search */
+.pt-tbl colgroup col:nth-child(1) { width: 160px; } /* ID */
+.pt-tbl colgroup col:nth-child(2) { width: 100px; } /* Fecha */
+.pt-tbl colgroup col:nth-child(3) { width: 180px; } /* Cliente */
+.pt-tbl colgroup col:nth-child(4) { width: 170px; } /* Método */
+.pt-tbl colgroup col:nth-child(5) { width: 150px; } /* Estado */
+.pt-tbl colgroup col:nth-child(6) { width: 140px; } /* Valor */
+
+.pt-th,
+.pt-td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Head ────────────────────────────────────────────────────────────────── */
+
+.pt-head-row {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pt-th {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.pt-th--right {
+  text-align: right;
+}
+
+.pt-th--sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.pt-th--sortable:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.pt-sort-icon {
+  display: inline-block;
+  margin-left: 4px;
+  font-style: normal;
+  font-size: 11px;
+}
+
+.pt-sort-icon--idle {
+  opacity: 0.35;
+}
+
+.pt-sort-icon--active {
+  color: #0059d5;
+  opacity: 1;
+}
+
+/* ── Rows ────────────────────────────────────────────────────────────────── */
+
+.pt-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.12s;
+}
+
+.pt-row:last-child {
+  border-bottom: none;
+}
+
+.pt-row:hover {
+  background: #f9fafb;
+}
+
+.pt-row--highlight {
+  background: #eff6ff;
+  animation: pt-pulse 1.5s ease;
+}
+
+@keyframes pt-pulse {
+  0%, 100% { background: #eff6ff; }
+  50%       { background: #dbeafe; }
+}
+
+.pt-td {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: #374151;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.pt-id-link {
+  color: #0059d5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pt-id-link:hover {
+  text-decoration: underline;
+}
+
+.pt-td--muted {
+  color: #9ca3af;
+}
+
+.pt-td--bold {
+  font-weight: 600;
+  color: #111827;
+}
+
+.pt-td--right {
+  text-align: right;
+}
+
+.pt-td--method {
+  display: flex; /* only works in block-level context */
+  align-items: center;
+  gap: 6px;
+  color: #374151;
+}
+
+/* For table cells we can't use display:flex directly — use inline trick */
+.pt-td--method {
+  display: table-cell; /* override */
+}
+
+.pt-method-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 700;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.pt-td--empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 40px 20px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.pt-footer {
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pt-ver-todos {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0059d5;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.pt-ver-todos:hover {
+  color: #00429f;
+  text-decoration: underline;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .pt-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .pt-filter-btn {
+    padding: 0 12px;
+  }
+
+  /* hide "Filtrar" label text on very small screens, keep icon */
+  .pt-filter-btn span:not(.pt-filter-count) {
+    display: none;
+  }
+
+  .pt-filter-panel {
+    min-width: 0;
+    width: calc(100vw - 32px);
+    right: 0;
+    left: auto;
+  }
+
+  .pt-filter-fields {
+    flex-direction: column;
+  }
+
+  .pt-filter-field select {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .pt-th, .pt-td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

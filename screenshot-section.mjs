@@ -6,8 +6,8 @@ async function capture() {
   
   // Try URLs (user said /medios-de-pago; app route is /configuracion/medios-pago)
   const urls = [
-    'http://localhost:5176/configuracion/medios-pago',
-    'http://localhost:5176/medios-de-pago'
+    'http://localhost:5177/configuracion/medios-pago',
+    'http://localhost:5177/medios-de-pago'
   ];
   
   let loaded = false;
@@ -22,7 +22,7 @@ async function capture() {
   }
   
   if (!loaded) {
-    console.error('Could not load page. Is the dev server running on port 5176?');
+    console.error('Could not load page. Is the dev server running on port 5177?');
     await browser.close();
     process.exit(1);
   }

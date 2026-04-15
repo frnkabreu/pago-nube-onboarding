@@ -93,9 +93,11 @@ export function SettingsSidebar() {
             {section.items.map((item) => (
               <button
                 key={item.label}
+                type="button"
                 className={`settings-sidebar-item${
                   (item.activePaths ?? [item.path]).includes(location.pathname) ? " active" : ""
                 }`}
+                onClick={() => navigate(item.path)}
               >
                 <span className="settings-sidebar-item-icon">
                   <item.icon size="small" />
