@@ -17,11 +17,13 @@ export function grantAccess(): void {
 }
 
 export function getConfiguredPassword(): string {
-  return (import.meta.env.VITE_APP_ACCESS_PASSWORD ?? "").trim();
+  const raw = import.meta.env.VITE_APP_ACCESS_PASSWORD ?? "";
+  // BOM / espaços (ex.: paste no GitHub ou .env)
+  return raw.replace(/^\uFEFF/, "").trim();
 }
 
 export function verifyPassword(input: string): boolean {
   const expected = getConfiguredPassword();
   if (!expected) return false;
-  return input === expected;
+  return input.trim() === expected;
 }
