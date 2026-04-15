@@ -2,7 +2,7 @@ import http from 'node:http'
 import type { IncomingMessage } from 'node:http'
 import path from 'path'
 import type { Plugin } from 'vite'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -65,27 +65,38 @@ function forwardRequestHeaders(req: IncomingMessage): http.OutgoingHttpHeaders {
   return h
 }
 
+const projectRoot = path.resolve(__dirname, '.')
+
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [financeAssistantDevProxy(), react(), tailwindcss()],
-  base: '/',
-  define: {
-    global: 'globalThis',
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+export default defineConfig(({ mode }) => {
+  /** Ficheiros `.env` + variáveis já no processo (ex.: secret no GitHub Actions). */
+  const env = loadEnv(mode, projectRoot, '')
+  const accessPassword =
+    env.VITE_APP_ACCESS_PASSWORD ?? process.env.VITE_APP_ACCESS_PASSWORD ?? ''
+
+  return {
+    plugins: [financeAssistantDevProxy(), react(), tailwindcss()],
+    base: '/',
+    envDir: projectRoot,
+    define: {
+      global: 'globalThis',
+      'import.meta.env.VITE_APP_ACCESS_PASSWORD': JSON.stringify(accessPassword),
     },
-  },
-  server: {
-    /** URL fixa: http://localhost:5177/ — se a porta estiver ocupada, o Vite falha (evita abrir 5178 sem perceber). */
-    port: 5177,
-    strictPort: true,
-    allowedHosts: true,
-    /** Ao iniciar `npm run dev`, abre o dashboard. */
-    open: '/dashboard',
-    /** Liga só em localhost (IPv4); evita problemas com `host: true` + acesso via localhost em alguns ambientes. */
-    host: 'localhost',
-    /** El proxy del BFF va en el plugin `financeAssistantDevProxy` (misma origin, sin CORS). */
-  },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    server: {
+      /** URL fixa: http://localhost:5177/ — se a porta estiver ocupada, o Vite falha (evita abrir 5178 sem perceber). */
+      port: 5177,
+      strictPort: true,
+      allowedHosts: true,
+      /** Ao iniciar `npm run dev`, abre o dashboard. */
+      open: '/dashboard',
+      /** Liga só em localhost (IPv4); evita problemas com `host: true` + acesso via localhost em alguns ambientes. */
+      host: 'localhost',
+      /** El proxy del BFF va en el plugin `financeAssistantDevProxy` (misma origin, sin CORS). */
+    },
+  }
 })

@@ -19,7 +19,9 @@ export function LoginPage({ onUnlocked }: LoginPageProps) {
 
     if (!getConfiguredPassword()) {
       setError(
-        "Senha não configurada. Defina VITE_APP_ACCESS_PASSWORD no ficheiro .env (veja .env.example).",
+        import.meta.env.DEV
+          ? "Senha não configurada para o dev server. Confirme que existe um ficheiro .env na raiz do projeto com VITE_APP_ACCESS_PASSWORD=... e reinicie npm run dev (o Vite só lê o .env ao arrancar)."
+          : "Este site foi gerado sem VITE_APP_ACCESS_PASSWORD no build. No GitHub: adicione o secret com esse nome e volte a fazer deploy; noutros hosts, defina a variável nas env do projeto e faça novo build.",
       );
       return;
     }
