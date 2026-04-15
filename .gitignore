@@ -27,3 +27,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Artefactos acidentais (URLs como nome de pasta)
+localhost:*/
