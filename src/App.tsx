@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 /** Base do app (Vite `base`); necessário para GitHub Pages em subpath. */
@@ -20,8 +21,16 @@ import IngresosPrevistos from "./pages/IngresosPrevistos";
 import SaludPagosPage from "./pages/SaludPagosPage";
 import ExtractoPage from "./pages/ExtractoPage";
 import PagosPage from "./pages/PagosPage";
+import { LoginPage } from "./pages/LoginPage";
+import { isAccessGranted } from "./lib/app-access";
 
 function App() {
+  const [unlocked, setUnlocked] = useState(() => isAccessGranted());
+
+  if (!unlocked) {
+    return <LoginPage onUnlocked={() => setUnlocked(true)} />;
+  }
+
   return (
     <OnboardingProvider>
       <SalesProvider>
