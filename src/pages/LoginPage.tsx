@@ -21,7 +21,7 @@ export function LoginPage({ onUnlocked }: LoginPageProps) {
       setError(
         import.meta.env.DEV
           ? "Senha não configurada para o dev server. Confirme que existe um ficheiro .env na raiz do projeto com VITE_APP_ACCESS_PASSWORD=... e reinicie npm run dev (o Vite só lê o .env ao arrancar)."
-          : "Este site foi gerado sem VITE_APP_ACCESS_PASSWORD no build. No GitHub: adicione o secret com esse nome e volte a fazer deploy; noutros hosts, defina a variável nas env do projeto e faça novo build.",
+          : "Este site foi gerado sem VITE_APP_ACCESS_PASSWORD no build. No GitHub: no repositório que executa o Actions (ex.: TiendaNube/pago-nube-onboarding), vá a Settings → Secrets → Actions → New secret, nome exato VITE_APP_ACCESS_PASSWORD, valor da senha. Depois Actions → workflow Deploy → Run workflow. Em Vercel/Netlify: Project → Environment Variables → mesmo nome e redeploy.",
       );
       return;
     }

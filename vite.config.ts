@@ -68,11 +68,16 @@ function forwardRequestHeaders(req: IncomingMessage): http.OutgoingHttpHeaders {
 const projectRoot = path.resolve(__dirname, '.')
 
 // https://vite.dev/config/
+function resolveAccessPassword(envFromFiles: Record<string, string>): string {
+  const fromFile = (envFromFiles.VITE_APP_ACCESS_PASSWORD ?? '').replace(/^\uFEFF/, '').trim()
+  if (fromFile.length > 0) return fromFile
+  /** CI (GitHub Actions): só existe em `process.env`, não em ficheiros `.env` no checkout. */
+  return (process.env.VITE_APP_ACCESS_PASSWORD ?? '').replace(/^\uFEFF/, '').trim()
+}
+
 export default defineConfig(({ mode }) => {
-  /** Ficheiros `.env` + variáveis já no processo (ex.: secret no GitHub Actions). */
   const env = loadEnv(mode, projectRoot, '')
-  const accessPassword =
-    env.VITE_APP_ACCESS_PASSWORD ?? process.env.VITE_APP_ACCESS_PASSWORD ?? ''
+  const accessPassword = resolveAccessPassword(env)
 
   return {
     plugins: [financeAssistantDevProxy(), react(), tailwindcss()],

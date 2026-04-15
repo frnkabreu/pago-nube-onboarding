@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -40,7 +41,10 @@ jobs:
             exit 1
           fi
 
+      # Reforço explícito: o secret tem de existir neste repositório (TiendaNube/…), não só num fork.
       - run: npm run build
+        env:
+          VITE_APP_ACCESS_PASSWORD: ${{ secrets.VITE_APP_ACCESS_PASSWORD }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
